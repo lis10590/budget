@@ -11,9 +11,11 @@ export const addNewIncome = async (income) => {
   }
 };
 
-export const getIncomes = async () => {
+export const getIncomes = async (userId) => {
   try {
-    const res = await axios.get(`${apiUrl}/api/incomes/getIncomes`);
+    const res = await axios.get(
+      `${apiUrl}/api/incomes/getIncomes?userId=${userId}`
+    );
     return res.data;
   } catch (err) {
     console.error(err);

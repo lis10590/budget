@@ -80,4 +80,4 @@ const incomeSlice = createSlice({
 
 export default incomeSlice.reducer;
 
-export const selectAllExpenses = (state) => state.incomes.incomes;
+export const selectAllIncomes = (state) => state.incomes.incomes;

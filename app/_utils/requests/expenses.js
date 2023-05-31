@@ -11,9 +11,11 @@ export const addNewExpense = async (expense) => {
   }
 };
 
-export const getExpenses = async () => {
+export const getExpenses = async (userId) => {
   try {
-    const res = await axios.get(`${apiUrl}/api/expenses/getExpenses`);
+    const res = await axios.get(
+      `${apiUrl}/api/expenses/getExpenses?userId=${userId}`
+    );
     return res.data;
   } catch (err) {
     console.error(err);
