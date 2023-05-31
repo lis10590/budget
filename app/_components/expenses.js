@@ -6,9 +6,11 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import DropdownMenu from "./dropdownMenu";
 import { expenseAddition } from "../_utils/store/expenses";
+import { useSession } from "next-auth/react";
 
 const Expenses = () => {
   const dispatch = useDispatch();
+  const { data } = useSession();
   const [showComp, setShowComp] = useState(false);
   const [selected, setSelected] = useState("");
   const [showSum, setShowSum] = useState(false);
@@ -48,7 +50,10 @@ const Expenses = () => {
     const obj = {
       expenseName: selected,
       sum: sum,
+      email: data.user.email,
     };
+
+    console.log(obj);
     dispatch(expenseAddition(obj));
   };
 
@@ -56,7 +61,9 @@ const Expenses = () => {
     const obj = {
       expenseName: expense,
       sum: customInputSum,
+      email: data.user.email,
     };
+    dispatch(expenseAddition(obj));
   };
   return (
     <div>

@@ -1,14 +1,23 @@
 import { Schema, model, models } from "mongoose";
-import Expense from "./Expense";
-import Income from "./Income";
 
 const userSchema = new Schema({
   email: { type: String },
   firstName: { type: String },
   lastName: { type: String },
   password: { type: String },
-  expenses: [Expense],
-  incomes: [Income],
+  expenses: [
+    {
+      expenseName: { type: String },
+      sum: { type: Number },
+      balance: { type: Number },
+    },
+  ],
+  incomes: [
+    {
+      incomeName: { type: String },
+      sum: { type: Number },
+    },
+  ],
 });
 
 const User = models.User || model("User", userSchema);

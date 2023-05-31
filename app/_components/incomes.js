@@ -4,8 +4,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import DropdownMenu from "./dropdownMenu";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { incomeAddition } from "../_utils/store/incomes";
+import { useSession } from "next-auth/react";
 
 const Incomes = () => {
+  const dispatch = useDispatch();
+  const { data } = useSession();
+  console.log(data);
   const [showComp, setShowComp] = useState(false);
   const [selected, setSelected] = useState("");
   const [showSum, setShowSum] = useState(false);
@@ -27,6 +33,24 @@ const Incomes = () => {
   const onAddClick = () => {
     setShowComp(true);
     setShowSum(true);
+  };
+
+  const onSaveInput = () => {
+    const obj = {
+      incomeName: selected,
+      sum: sum,
+      email: data.user.email,
+    };
+    dispatch(incomeAddition(obj));
+  };
+
+  const onSaveCustomInput = () => {
+    const obj = {
+      incomeName: income,
+      sum: customInputSum,
+      email: data.user.email,
+    };
+    dispatch(incomeAddition(obj));
   };
   return (
     <div>

@@ -8,22 +8,24 @@ export async function POST(req) {
   await connectDB();
 
   const expense = await req.json();
+  console.log(expense);
 
   try {
-    const existingExpense = await User.findOne({
-      "expenses.expenseName": expense.expenseName,
-    }).populate("expenses");
-    if (existingExpense[0]) {
-      return NextResponse.json("Expense exists", {
-        status: 400,
-      });
+    const user = await User.findOne({ email: expense.email });
+    for (const item of user.expenses) {
+      if (expense.expenseName === item.expenseName) {
+        return NextResponse.json("Expense exists", {
+          status: 400,
+        });
+      }
     }
+
     try {
       let result = await User.findOneAndUpdate(
         { email: expense.email },
         {
           $push: {
-            incomes: {
+            expenses: {
               expenseName: expense.expenseName,
               sum: expense.sum,
               balance: expense.sum,
