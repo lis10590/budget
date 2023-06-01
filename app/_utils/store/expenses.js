@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { addNewExpense, getExpenses } from "../requests/expenses";
+import { addNewExpense } from "../requests/expenses";
 
 const initialExpensesState = {
   expenses: [],
@@ -14,23 +14,6 @@ export const expenseAddition = createAsyncThunk(
   async (expense, thunkAPI) => {
     try {
       return await addNewExpense(expense);
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-export const getAllExpenses = createAsyncThunk(
-  "expenses/getExpenses",
-  async (thunkAPI) => {
-    try {
-      return await getExpenses();
     } catch (error) {
       const message =
         (error.response &&
@@ -61,18 +44,6 @@ const expenseSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-      })
-
-      .addCase(getAllExpenses.pending, (state, action) => {
-        state.isLoading = true;
-      })
-      .addCase(getAllExpenses.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.expenses = action.payload;
-      })
-      .addCase(getAllExpenses.rejected, (state, action) => {
-        state.isLoading = false;
       });
   },
 });

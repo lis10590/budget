@@ -10,13 +10,13 @@ export async function POST(req) {
   const income = await req.json();
 
   try {
-    const existingIncome = await User.findOne({
-      "incomes.incomeName": income.incomeName,
-    }).populate("incomes");
-    if (existingIncome) {
-      return NextResponse.json("Income exists", {
-        status: 400,
-      });
+    const user = await User.findOne({ email: income.email });
+    for (const item of user.incomes) {
+      if (income.incomeName === item.incomeName) {
+        return NextResponse.json("Income exists", {
+          status: 400,
+        });
+      }
     }
     try {
       let result = await User.findOneAndUpdate(

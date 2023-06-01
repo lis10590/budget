@@ -13,13 +13,15 @@ const DropdownMenu = (props) => {
     <Dropdown onSelect={onSelectDrop} className="d-flex justify-content-center">
       <Dropdown.Toggle id="dropdown-basic">{drop}</Dropdown.Toggle>
       <Dropdown.Menu>
-        {props.menuOptions.map((option, index) => {
-          return (
-            <Dropdown.Item key={index} eventKey={option}>
-              {option}
-            </Dropdown.Item>
-          );
-        })}
+        {props.menuOptions
+          ? props.menuOptions.map((option, index) => {
+              return (
+                <Dropdown.Item key={index} eventKey={option}>
+                  {option}
+                </Dropdown.Item>
+              );
+            })
+          : null}
       </Dropdown.Menu>
     </Dropdown>
   );

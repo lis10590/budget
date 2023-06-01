@@ -4,12 +4,15 @@ import User from "@/app/_utils/schemas/User";
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 
-export async function GET(req) {
+export async function PUT(req) {
   await connectDB();
-  const { searchParams } = new URL(req.url);
-  const userId = searchParams.get("userId");
-  console.log(userId);
-  const res = await User.findOne({ email: userId });
+  const body = await req.json();
+
+  const res = await User.findOneAndUpdate(
+    { email: body.email, "expenses.expenseName": body.expenseName },
+    { $set: { "expenses.$.balance": body.newBalace } },
+    { new: true }
+  );
 
   return NextResponse.json(res, {
     status: 200,

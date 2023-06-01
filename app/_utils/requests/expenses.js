@@ -10,14 +10,3 @@ export const addNewExpense = async (expense) => {
     console.error(err);
   }
 };
-
-export const getExpenses = async (userId) => {
-  try {
-    const res = await axios.get(
-      `${apiUrl}/api/expenses/getExpenses?userId=${userId}`
-    );
-    return res.data;
-  } catch (err) {
-    console.error(err);
-  }
-};

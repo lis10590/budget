@@ -10,14 +10,3 @@ export const addNewIncome = async (income) => {
     console.error(err);
   }
 };
-
-export const getIncomes = async (userId) => {
-  try {
-    const res = await axios.get(
-      `${apiUrl}/api/incomes/getIncomes?userId=${userId}`
-    );
-    return res.data;
-  } catch (err) {
-    console.error(err);
-  }
-};
