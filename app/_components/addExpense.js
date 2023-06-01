@@ -30,7 +30,7 @@ const AddExpense = (props) => {
       </Modal.Header>
       <Modal.Body>
         <DropdownMenu menuOptions={props.expenses} selected={handleSelection} />
-        <div className="mt-3">
+      {  <div className="mt-3">
           <FormGroup className="d-flex flex-column align-items-end">
             <Form.Label>סכום</Form.Label>
             <Form.Control
@@ -42,7 +42,7 @@ const AddExpense = (props) => {
           <div className="d-flex justify-content-center">
             <Button className="mt-3">הוספת הוצאה לא מהרשימה </Button>
           </div>
-
+          <div>
           <FormGroup className="d-flex flex-column align-items-end">
             <Form.Label>שם הוצאה</Form.Label>
             <Form.Control
@@ -59,6 +59,9 @@ const AddExpense = (props) => {
               onChange={(e) => setCustomInputSum(e.target.value)}
             />
           </FormGroup>
+          </div>}
+
+      
           <div className="mt-3 d-flex justify-content-center">
             <Button className="me-3">שמור</Button>
             <Button onClick={props.onClose}>סגור</Button>
