@@ -105,6 +105,7 @@ const Home = () => {
         isOpen={addExpenses}
         onClose={closeExpenseModalHandler}
         expenses={expenses}
+        user={user}
       />
       <AddIncome
         isOpen={addIncomes}
