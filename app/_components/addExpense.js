@@ -4,7 +4,6 @@ import DropdownMenu from "./dropdownMenu";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { expenseAddition } from "../_utils/store/expenses";
-import { updateOneExpense } from "../_utils/store/users";
 
 const AddExpense = (props) => {
   const dispatch = useDispatch();
@@ -43,7 +42,7 @@ const AddExpense = (props) => {
       };
 
       console.log(obj);
-      dispatch(updateOneExpense(obj));
+      // dispatch(updateOneExpense(obj));
     } else if (showCustom && props.user) {
       const obj = {
         expenseName: expense,

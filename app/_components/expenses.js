@@ -1,5 +1,5 @@
 "use client";
-import { FormGroup, Form, Button } from "react-bootstrap";
+import { FormGroup, Form, Button, CloseButton } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
@@ -8,13 +8,12 @@ import DropdownMenu from "./dropdownMenu";
 import { expenseAddition } from "../_utils/store/expenses";
 import { useSession } from "next-auth/react";
 
-const Expenses = () => {
+const Expenses = (props) => {
   const dispatch = useDispatch();
   const { data } = useSession();
   const [showComp, setShowComp] = useState(false);
   const [selected, setSelected] = useState("");
-  const [showSum, setShowSum] = useState(false);
-  const [expense, setExpense] = useState("");
+  const [customExpense, setCustomExpense] = useState("");
   const [sum, setSum] = useState(0);
   const [customInputSum, setCustomInputSum] = useState(0);
   const menuOptions = [
@@ -35,90 +34,89 @@ const Expenses = () => {
   const handleSelection = (selection) => {
     setSelected(selection);
     if (selection === "אחר") {
-      setShowSum(false);
+      setShowComp(false);
     } else {
-      setShowSum(true);
+      setShowComp(true);
     }
   };
 
   const onAddClick = () => {
     setShowComp(true);
-    setShowSum(true);
   };
 
-  const onSaveInput = () => {
-    const obj = {
-      expenseName: selected,
-      sum: sum,
-      email: data.user.email,
-    };
-
-    console.log(obj);
-    dispatch(expenseAddition(obj));
+  const onCloseCustom = () => {
+    setShowComp(false);
+    setSelected("");
   };
 
-  const onSaveCustomInput = () => {
-    const obj = {
-      expenseName: expense,
-      sum: customInputSum,
-      email: data.user.email,
-    };
-    dispatch(expenseAddition(obj));
+  const handleExpense = () => {
+    if (selected === "אחר") {
+      const newExpense = {
+        category: customExpense,
+        sum: customInputSum,
+      };
+      props.newExpense(newExpense);
+    } else {
+      const newExpense = {
+        category: selected,
+        sum: sum,
+      };
+
+      props.newExpense(newExpense);
+    }
   };
+
   return (
     <div>
-      <Button className="mb-3" onClick={onAddClick}>
-        הוסף/הוסיפי הוצאה
-        <FontAwesomeIcon icon={faPlus} />
-      </Button>
+      <div className="d-flex justify-content-end">
+        <Button className="mb-3" onClick={onAddClick}>
+          הוסף הוצאה
+          <FontAwesomeIcon icon={faPlus} />
+        </Button>
+      </div>
+
       {showComp && (
-        <>
-          <div className="mt-3 mb-3">
-            <DropdownMenu
-              menuOptions={menuOptions}
-              selected={handleSelection}
+        <div>
+          <DropdownMenu menuOptions={menuOptions} selected={handleSelection} />
+
+          <FormGroup className="d-flex flex-column align-items-end">
+            <Form.Label>סכום</Form.Label>
+            <Form.Control
+              className="text-end"
+              type="text"
+              value={sum}
+              onChange={(e) => setSum(e.target.value)}
             />
-            {showSum && (
-              <div className="d-flex flex-row-reverse align-items-end">
-                <FormGroup className="d-flex flex-column align-items-end">
-                  <Form.Label>סכום</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={sum}
-                    onChange={(e) => setSum(e.target.value)}
-                  />
-                </FormGroup>
-                <div className="me-3">
-                  <Button onClick={onSaveInput}>שמור</Button>
-                </div>
-              </div>
-            )}
-          </div>
-          {selected === "אחר" && (
-            <div className="mt-3">
-              <FormGroup className="d-flex flex-column align-items-end">
-                <Form.Label>שם הוצאה</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={expense}
-                  onChange={(e) => setExpense(e.target.value)}
-                />
-              </FormGroup>
-              <FormGroup className="d-flex flex-column align-items-end">
-                <Form.Label>סכום</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={customInputSum}
-                  onChange={(e) => setCustomInputSum(e.target.value)}
-                />
-              </FormGroup>
-              <div className="mt-3 d-flex justify-content-end">
-                <Button onClick={onSaveCustomInput}>שמור</Button>
-              </div>
-            </div>
-          )}
-        </>
+          </FormGroup>
+        </div>
       )}
+
+      {selected === "אחר" && (
+        <div className="mt-3 d-flex flex-column align-items-end">
+          <CloseButton onClick={onCloseCustom} />
+          <FormGroup className="text-end">
+            <Form.Label>שם הוצאה</Form.Label>
+            <Form.Control
+              className="text-end"
+              type="text"
+              value={customExpense}
+              onChange={(e) => setCustomExpense(e.target.value)}
+            />
+          </FormGroup>
+          <FormGroup className="text-end">
+            <Form.Label>סכום</Form.Label>
+            <Form.Control
+              className="text-end"
+              type="text"
+              value={customInputSum}
+              onChange={(e) => setCustomInputSum(e.target.value)}
+            />
+          </FormGroup>
+        </div>
+      )}
+      <div className="mt-3 d-flex justify-content-start">
+        <Button onClick={handleExpense}> הוסף לרשימה</Button>
+      </div>
     </div>
   );
 };

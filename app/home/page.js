@@ -10,6 +10,8 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import AddExpense from "../_components/addExpense";
 import AddIncome from "../_components/addIncome";
 import { modalActions } from "../_utils/store/modal";
+import DropdownMenu from "../_components/dropdownMenu";
+import { getAllBudgets, selectAllBudgets } from "../_utils/store/budgets";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -17,12 +19,14 @@ const Home = () => {
   const email = data?.user?.email;
 
   useEffect(() => {
+    dispatch(getAllBudgets());
     if (email) {
       dispatch(getUserByEmail(email));
     }
   }, [dispatch, email]);
 
   const user = useSelector((state) => state.users.user);
+  const budgets = useSelector(selectAllBudgets);
   console.log(user);
   const addExpenses = useSelector((state) => state.modal.addExpensesModalOpen);
   const addIncomes = useSelector((state) => state.modal.addIncomesModalOpen);
@@ -47,8 +51,17 @@ const Home = () => {
     } else return null;
   };
 
+  const arrangeBudgets = () => {
+    let arr = [];
+    for (const item of budgets) {
+      arr.push(item.name);
+    }
+    return arr;
+  };
+
   const expenses = arrangeExpenses();
   const incomes = arrangeIncomes();
+  const budgetNames = arrangeBudgets();
 
   const addExpenseModalHandler = () => {
     dispatch(modalActions.addExpensesModalOpen());
@@ -70,6 +83,10 @@ const Home = () => {
     <div
       className={`${styles.mainDiv} mt-5 d-flex flex-column align-items-center`}
     >
+      <div className="d-flex">
+        <p>תקציב נבחר</p>
+        <DropdownMenu menuOptions={budgetNames} />
+      </div>
       <div className="d-flex">
         <Button className="mb-5 me-3" onClick={addExpenseModalHandler}>
           הוספת הוצאה חדשה

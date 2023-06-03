@@ -4,6 +4,7 @@ import incomesReducer from "./incomes";
 import authReducer from "./auth";
 import usersReducer from "./users";
 import modalReducer from "./modal";
+import budgetReducer from "./budgets";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     auth: authReducer,
     users: usersReducer,
     modal: modalReducer,
+    budgets: budgetReducer,
   },
 });
 
