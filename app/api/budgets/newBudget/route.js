@@ -7,19 +7,22 @@ export const fetchCache = "force-no-store";
 export async function POST(req) {
   await connectDB();
   const budget = await req.json();
-  const newBudget = await new Budget({
-    name: budget.name,
-    balance: budget.balance,
-    incomesAmount: budget.incomesAmount,
-    expensesAmount: budget.expensesAmount,
-    predefinedExpenses: budget.predefinedExpenses,
-    predefinedIncomes: budget.predefinedIncomes,
-    expenses: [],
-    incomes: [],
-  });
+  // const newBudget = await new Budget({
+  //   name: budget.name,
+  //   balance: budget.balance,
+  //   incomesAmount: budget.incomesAmount,
+  //   expensesAmount: budget.expensesAmount,
+  //   predefinedExpenses: budget.predefinedExpenses,
+  //   predefinedIncomes: budget.predefinedIncomes,
+  //   expenses: [],
+  //   incomes: [],
+  // });
+
+  const newBudget = await new Budget(budget);
 
   try {
     const savedBudget = await newBudget.save();
+    console.log(savedBudget);
     return NextResponse.json(savedBudget, {
       status: 200,
     });

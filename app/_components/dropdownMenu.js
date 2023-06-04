@@ -6,7 +6,9 @@ const DropdownMenu = (props) => {
 
   const onSelectDrop = (event) => {
     setDrop(event);
-    props.selected(event);
+    if (props.selected) {
+      props.selected(event);
+    }
   };
 
   return (

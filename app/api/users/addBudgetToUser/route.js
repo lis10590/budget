@@ -7,15 +7,15 @@ export const fetchCache = "force-no-store";
 export async function PUT(req) {
   await connectDB();
   const body = await req.json();
+  const { email, budgetId } = body;
+  console.log(body);
 
   try {
     const user = await User.findOneAndUpdate(
-      { email: body.email },
+      { email: email },
       {
         $push: {
-          budgets: {
-            id: body.budgetId,
-          },
+          budgets: budgetId,
         },
       }
     );

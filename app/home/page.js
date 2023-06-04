@@ -1,7 +1,7 @@
 "use client";
 import { Table, Button } from "react-bootstrap";
 import styles from "../_styles/status.module.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserByEmail } from "../_utils/store/users";
 import { useSession } from "next-auth/react";
@@ -25,17 +25,54 @@ const Home = () => {
     }
   }, [dispatch, email]);
 
+  const [selected, setSelected] = useState("");
+
   const user = useSelector((state) => state.users.user);
   const budgets = useSelector(selectAllBudgets);
   console.log(user);
   const addExpenses = useSelector((state) => state.modal.addExpensesModalOpen);
   const addIncomes = useSelector((state) => state.modal.addIncomesModalOpen);
 
+  const handleSelection = (selection) => {
+    setSelected(selection);
+  };
+
+  const arrangeBudgets = () => {
+    let userBudgets = [];
+    let budgetNames = [];
+    if (user.budgets && user.budgets.length !== 0) {
+      for (const budget of budgets) {
+        for (const item of user.budgets) {
+          if (budget._id === item) {
+            userBudgets.push(budget);
+          }
+        }
+      }
+    }
+
+    for (const item of userBudgets) {
+      budgetNames.push(item.name);
+    }
+
+    return { userBudgets, budgetNames };
+  };
+
+  const { userBudgets, budgetNames } = arrangeBudgets();
+
+  const chosenBudget = () => {
+    for (const budget of userBudgets) {
+      if (budget.name === selected) {
+        return budget;
+      }
+    }
+  };
+  const selectedBudget = chosenBudget();
+
   const arrangeExpenses = () => {
     let arr = [];
-    if (user.expenses && user.expenses.length !== 0) {
-      for (const item of user.expenses) {
-        arr.push(item.expenseName);
+    if (selectedBudget) {
+      for (const item of selectedBudget.predefinedExpenses) {
+        arr.push(item.category);
       }
       return arr;
     } else return null;
@@ -43,25 +80,16 @@ const Home = () => {
 
   const arrangeIncomes = () => {
     let arr = [];
-    if (user.incomes && user.incomes.length !== 0) {
-      for (const item of user.incomes) {
-        arr.push(item.incomeName);
+    if (selectedBudget) {
+      for (const item of selectedBudget.predefinedIncomes) {
+        arr.push(item.category);
       }
       return arr;
     } else return null;
   };
 
-  const arrangeBudgets = () => {
-    let arr = [];
-    for (const item of budgets) {
-      arr.push(item.name);
-    }
-    return arr;
-  };
-
   const expenses = arrangeExpenses();
   const incomes = arrangeIncomes();
-  const budgetNames = arrangeBudgets();
 
   const addExpenseModalHandler = () => {
     dispatch(modalActions.addExpensesModalOpen());
@@ -83,11 +111,11 @@ const Home = () => {
     <div
       className={`${styles.mainDiv} mt-5 d-flex flex-column align-items-center`}
     >
-      <div className="d-flex">
-        <p>תקציב נבחר</p>
-        <DropdownMenu menuOptions={budgetNames} />
+      <div className="d-flex flex-column">
+        <p className="text-center">תקציב נבחר</p>
+        <DropdownMenu menuOptions={budgetNames} selected={handleSelection} />
       </div>
-      <div className="d-flex">
+      <div className="d-flex mt-3">
         <Button className="mb-5 me-3" onClick={addExpenseModalHandler}>
           הוספת הוצאה חדשה
           <FontAwesomeIcon icon={faPlus} />

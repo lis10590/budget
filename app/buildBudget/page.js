@@ -10,25 +10,76 @@ import {
   Table,
   Button,
 } from "react-bootstrap";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Expenses from "../_components/expenses";
 import Incomes from "../_components/incomes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { budgetAddition } from "../_utils/store/budgets";
 import { budgetAdditionToUser } from "../_utils/store/users";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useSession } from "next-auth/react";
+import { modalActions } from "../_utils/store/modal";
 import styles from "../_styles/budget.module.css";
+import UpdateComp from "../_components/updateComp";
 
 const BuildBudget = () => {
   const dispatch = useDispatch();
+
   const { data } = useSession();
   const [key, setKey] = useState("expenses");
   const [expenses, setExpenses] = useState([]);
   const [incomes, setIncomes] = useState([]);
-  const [totalAmount, setTotalAmount] = useState(0);
   const [budgetName, setBudgetName] = useState("");
+  const [input, setInput] = useState({
+    id: "",
+    category: "",
+    sum: 0,
+    type: "",
+  });
+
+  const updateModal = useSelector(
+    (state) => state.modal.updateComponentModalOpen
+  );
+
+  const openModalHandler = (input, type) => {
+    setInput({
+      id: input.id,
+      category: input.category,
+      sum: input.sum,
+      type,
+    });
+
+    dispatch(modalActions.updateComponentModalOpen());
+  };
+
+  const closeModalHandler = () => {
+    dispatch(modalActions.updateComponentModalClose());
+  };
+
+  const updateValueHandler = (updatedInput) => {
+    console.log(updatedInput);
+    if (updatedInput.type === "expense") {
+      const updatedData = expenses.map((expense) => {
+        if (expense.id === updatedInput.id) {
+          return { ...expense, ...updatedInput };
+        }
+        return expense;
+      });
+
+      setExpenses(updatedData);
+    } else if (updatedInput.type === "income") {
+      const updatedData = incomes.map((income) => {
+        if (income.id === updatedInput.id) {
+          return { ...income, ...updatedInput };
+        }
+        return income;
+      });
+
+      setIncomes(updatedData);
+    }
+    dispatch(modalActions.updateComponentModalClose());
+  };
 
   const addExpenseToList = (newExpense) => {
     if (expenses.length === 0) {
@@ -57,10 +108,10 @@ const BuildBudget = () => {
     let incomesAmount = 0;
     let balace = 0;
     for (const item of expenses) {
-      expensesAmount = expensesAmount + item.sum;
+      expensesAmount = Number(expensesAmount) + Number(item.sum);
     }
     for (const item2 of incomes) {
-      incomesAmount = incomesAmount + item2.sum;
+      incomesAmount = Number(incomesAmount) + Number(item2.sum);
     }
 
     balace = incomesAmount - expensesAmount;
@@ -88,9 +139,10 @@ const BuildBudget = () => {
 
       const obj2 = {
         email: data?.user?.email,
-        budgetId: budgetData._id,
+        budgetId: budgetData.payload._id,
       };
-      dispatch(budgetAdditionToUser(obj2));
+      console.log(obj2);
+      await dispatch(budgetAdditionToUser(obj2));
     } catch (error) {
       console.error(error);
     }
@@ -114,7 +166,10 @@ const BuildBudget = () => {
                   return (
                     <tr>
                       <td>
-                        <FontAwesomeIcon icon={faPenToSquare} />
+                        <FontAwesomeIcon
+                          icon={faPenToSquare}
+                          onClick={() => openModalHandler(expense, "expense")}
+                        />
                       </td>
                       <td>{expense.sum}</td>
                       <td>{expense.category}</td>
@@ -136,7 +191,10 @@ const BuildBudget = () => {
                   return (
                     <tr>
                       <td>
-                        <FontAwesomeIcon icon={faPenToSquare} />
+                        <FontAwesomeIcon
+                          icon={faPenToSquare}
+                          onClick={() => openModalHandler(income, "income")}
+                        />
                       </td>
                       <td>{income.sum}</td>
                       <td>{income.category}</td>
@@ -174,6 +232,12 @@ const BuildBudget = () => {
           </Col>
         </Row>
       </Container>
+      <UpdateComp
+        isOpen={updateModal}
+        onClose={closeModalHandler}
+        input={input}
+        update={updateValueHandler}
+      />
     </div>
   );
 };

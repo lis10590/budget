@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import DropdownMenu from "./dropdownMenu";
 import { expenseAddition } from "../_utils/store/expenses";
 import { useSession } from "next-auth/react";
+import { v4 as uuidv4 } from "uuid";
 
 const Expenses = (props) => {
   const dispatch = useDispatch();
@@ -54,12 +55,14 @@ const Expenses = (props) => {
       const newExpense = {
         category: customExpense,
         sum: customInputSum,
+        id: uuidv4(),
       };
       props.newExpense(newExpense);
     } else {
       const newExpense = {
         category: selected,
         sum: sum,
+        id: uuidv4(),
       };
 
       props.newExpense(newExpense);

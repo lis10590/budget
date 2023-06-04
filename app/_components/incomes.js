@@ -7,11 +7,12 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { incomeAddition } from "../_utils/store/incomes";
 import { useSession } from "next-auth/react";
+import { v4 as uuidv4 } from "uuid";
 
 const Incomes = (props) => {
   const dispatch = useDispatch();
   const { data } = useSession();
-  console.log(data);
+
   const [showComp, setShowComp] = useState(false);
   const [selected, setSelected] = useState("");
   const [customIncome, setCustomIncome] = useState("");
@@ -43,12 +44,14 @@ const Incomes = (props) => {
       const newIncome = {
         category: customIncome,
         sum: customInputSum,
+        id: uuidv4(),
       };
       props.newIncome(newIncome);
     } else {
       const newIncome = {
         category: selected,
         sum: sum,
+        id: uuidv4(),
       };
 
       props.newIncome(newIncome);
