@@ -30,3 +30,27 @@ export const getBudget = async (budgetId) => {
     console.error(err);
   }
 };
+
+export const addExpenseToBudget = async (obj) => {
+  try {
+    const res = await axios.post(
+      `${apiUrl}/api/budgets/addExpenseToBudget`,
+      obj
+    );
+    return res.data;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const addIncomeToBudget = async (obj) => {
+  try {
+    const res = await axios.post(
+      `${apiUrl}/api/budgets/addIncomeToBudget`,
+      obj
+    );
+    return res.data;
+  } catch (err) {
+    console.error(err);
+  }
+};

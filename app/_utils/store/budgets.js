@@ -1,5 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { addBudget, getBudget, getBudgets } from "../requests/budgets";
+import {
+  addBudget,
+  getBudget,
+  getBudgets,
+  addExpenseToBudget,
+  addIncomeToBudget,
+} from "../requests/budgets";
 
 const initialBudgetState = {
   budgets: [],
@@ -61,6 +67,39 @@ export const getBudgetById = createAsyncThunk(
   }
 );
 
+export const expenseAdditionToBudget = createAsyncThunk(
+  "budgets/addExpenseToBudget",
+  async (obj, thunkAPI) => {
+    try {
+      return await addExpenseToBudget(obj);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const incomeAdditionToBudget = createAsyncThunk(
+  "budgets/addIncomeToBudget",
+  async (obj, thunkAPI) => {
+    try {
+      return await addIncomeToBudget(obj);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 const budgetSlice = createSlice({
   name: "budgets",
   initialState: initialBudgetState,
@@ -101,9 +140,37 @@ const budgetSlice = createSlice({
       .addCase(getBudgetById.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.budgets = action.payload;
+        state.budget = action.payload;
       })
       .addCase(getBudgetById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(expenseAdditionToBudget.pending, (state, action) => {
+        state.isLoading = true;
+      })
+
+      .addCase(expenseAdditionToBudget.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.budgets = action.payload;
+      })
+      .addCase(expenseAdditionToBudget.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(incomeAdditionToBudget.pending, (state, action) => {
+        state.isLoading = true;
+      })
+
+      .addCase(incomeAdditionToBudget.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.budgets = action.payload;
+      })
+      .addCase(incomeAdditionToBudget.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

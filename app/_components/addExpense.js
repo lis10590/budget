@@ -13,9 +13,36 @@ const AddExpense = (props) => {
   const [customInputSum, setCustomInputSum] = useState(0);
   const [showCustom, setShowCustom] = useState(false);
   const [showExpenses, setShowExpenses] = useState(true);
+  const [inputs, setInputs] = useState({
+    expenseName: "",
+    category: "",
+    sum: 0,
+  });
+
+  const [customInputs, setCustomInputs] = useState({
+    expenseName: "",
+    category: "",
+    sum: 0,
+  });
 
   const handleSelection = (selection) => {
     setSelected(selection);
+  };
+
+  const onChangeInputs = (e) => {
+    const { name, value } = e.target;
+    setInputs((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const onChangeCustomInputs = (e) => {
+    const { name, value } = e.target;
+    setCustomInputs((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   const onAddCustom = () => {
@@ -61,6 +88,16 @@ const AddExpense = (props) => {
       <Modal.Body>
         {showExpenses && (
           <div>
+            <FormGroup>
+              <Form.Label>שם הוצאה</Form.Label>
+              <Form.Control
+                type="text"
+                name="expenseName"
+                value={inputs.expenseName}
+                onChange={onChangeInputs}
+              />
+            </FormGroup>
+            <p>קטגוריה</p>
             <DropdownMenu
               menuOptions={props.expenses}
               selected={handleSelection}
@@ -69,9 +106,10 @@ const AddExpense = (props) => {
             <FormGroup className="d-flex flex-column align-items-end">
               <Form.Label>סכום</Form.Label>
               <Form.Control
+                name="sum"
                 type="text"
-                value={sum}
-                onChange={(e) => setSum(e.target.value)}
+                value={inputs.sum}
+                onChange={onChangeInputs}
               />
             </FormGroup>
             <div className="d-flex justify-content-center">
@@ -90,17 +128,28 @@ const AddExpense = (props) => {
             <FormGroup className="d-flex flex-column align-items-end">
               <Form.Label>שם הוצאה</Form.Label>
               <Form.Control
+                name="expenseName"
                 type="text"
-                value={expense}
-                onChange={(e) => setExpense(e.target.value)}
+                value={customInputs.expenseName}
+                onChange={onChangeCustomInputs}
+              />
+            </FormGroup>
+            <FormGroup className="d-flex flex-column align-items-end">
+              <Form.Label>קטגוריה</Form.Label>
+              <Form.Control
+                name="category"
+                type="text"
+                value={customInputs.category}
+                onChange={onChangeCustomInputs}
               />
             </FormGroup>
             <FormGroup className="d-flex flex-column align-items-end">
               <Form.Label>סכום</Form.Label>
               <Form.Control
+                name="sum"
                 type="text"
-                value={customInputSum}
-                onChange={(e) => setCustomInputSum(e.target.value)}
+                value={customInputs.sum}
+                onChange={onChangeCustomInputs}
               />
             </FormGroup>
           </div>
