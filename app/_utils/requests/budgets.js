@@ -33,7 +33,7 @@ export const getBudget = async (budgetId) => {
 
 export const addExpenseToBudget = async (obj) => {
   try {
-    const res = await axios.post(
+    const res = await axios.put(
       `${apiUrl}/api/budgets/addExpenseToBudget`,
       obj
     );
@@ -45,9 +45,17 @@ export const addExpenseToBudget = async (obj) => {
 
 export const addIncomeToBudget = async (obj) => {
   try {
-    const res = await axios.post(
-      `${apiUrl}/api/budgets/addIncomeToBudget`,
-      obj
+    const res = await axios.put(`${apiUrl}/api/budgets/addIncomeToBudget`, obj);
+    return res.data;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const getBudgetsByUser = async (userId) => {
+  try {
+    const res = await axios.get(
+      `${apiUrl}/api/budgets/getBudgetsByUser?userId=${userId}`
     );
     return res.data;
   } catch (err) {

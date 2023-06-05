@@ -5,11 +5,13 @@ import {
   getBudgets,
   addExpenseToBudget,
   addIncomeToBudget,
+  getBudgetsByUser,
 } from "../requests/budgets";
 
 const initialBudgetState = {
   budgets: [],
   budget: {},
+  budgetsByUser: [],
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -100,6 +102,23 @@ export const incomeAdditionToBudget = createAsyncThunk(
     }
   }
 );
+
+export const getAllBudgetsByUser = createAsyncThunk(
+  "budgets/getBudgetsByUser",
+  async (userId, thunkAPI) => {
+    try {
+      return await getBudgetsByUser(userId);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 const budgetSlice = createSlice({
   name: "budgets",
   initialState: initialBudgetState,
@@ -171,6 +190,20 @@ const budgetSlice = createSlice({
         state.budgets = action.payload;
       })
       .addCase(incomeAdditionToBudget.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getAllBudgetsByUser.pending, (state, action) => {
+        state.isLoading = true;
+      })
+
+      .addCase(getAllBudgetsByUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.budgetsByUser = action.payload;
+      })
+      .addCase(getAllBudgetsByUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

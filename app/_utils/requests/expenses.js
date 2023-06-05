@@ -10,3 +10,23 @@ export const addNewExpense = async (expense) => {
     console.error(err);
   }
 };
+
+export const getExpenses = async () => {
+  try {
+    const res = await axios.get(`${apiUrl}/api/expenses/getExpenses`);
+    return res.data;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const getExpensesByBudget = async (budgetId) => {
+  try {
+    const res = await axios.get(
+      `${apiUrl}/api/expenses/getExpensesByBudget?budgetId=${budgetId}`
+    );
+    return res.data;
+  } catch (err) {
+    console.error(err);
+  }
+};

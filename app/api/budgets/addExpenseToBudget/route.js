@@ -4,17 +4,19 @@ import { NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 
-export async function POST(req) {
+export async function PUT(req) {
   await connectDB();
-  const { expenseId, budgetId } = await req.json();
+  const body = await req.json();
+  const { budgetId, expenseId } = body;
+
   try {
-    Budget.findByIdAndUpdate(budgetId, {
+    const budget = await Budget.findByIdAndUpdate(budgetId, {
       $push: {
         expenses: expenseId,
       },
     });
-    const budgets = Budget.find({});
-    return NextResponse.json(budgets, {
+
+    return NextResponse.json(budget, {
       status: 200,
     });
   } catch (err) {
