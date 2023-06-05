@@ -11,15 +11,13 @@ import AddExpense from "../_components/addExpense";
 import AddIncome from "../_components/addIncome";
 import { modalActions } from "../_utils/store/modal";
 import DropdownMenu from "../_components/dropdownMenu";
-import {
-  getAllBudgets,
-  selectAllBudgets,
-  getBudgetById,
-  getAllBudgetsByUser,
-} from "../_utils/store/budgets";
+import { getAllBudgetsByUser } from "../_utils/store/budgets";
 import { getAllExpenses, selectAllExpenses } from "../_utils/store/expenses";
 import { getAllIncomes, selectAllIncomes } from "../_utils/store/incomes";
-import { expenseAdditionToBudget } from "../_utils/store/budgets";
+import {
+  expenseAdditionToBudget,
+  getAllBudgets,
+} from "../_utils/store/budgets";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -30,8 +28,9 @@ const Home = () => {
 
   const getUserAndBudgets = async () => {
     const loggedUser = await dispatch(getUserByEmail(email));
-    console.log(loggedUser.payload._id);
-    dispatch(getAllBudgetsByUser(loggedUser.payload._id));
+
+    const data = await dispatch(getAllBudgetsByUser(loggedUser.payload._id));
+    console.log(data);
   };
   useEffect(() => {
     dispatch(getAllBudgets());
@@ -42,51 +41,36 @@ const Home = () => {
     }
   }, [dispatch, email]);
 
-  const budgets = useSelector(selectAllBudgets);
-  console.log(budgets);
-  console.log(user);
   const addExpenses = useSelector((state) => state.modal.addExpensesModalOpen);
   const addIncomes = useSelector((state) => state.modal.addIncomesModalOpen);
   const expenses = useSelector(selectAllExpenses);
   const incomes = useSelector(selectAllIncomes);
-  const budget = useSelector((state) => state.budgets.budgetsByUser);
-  console.log(budget);
+  const budgets = useSelector((state) => state.budgets.budgetsByUser);
+  console.log(budgets);
 
   const handleSelection = (selection) => {
     setSelected(selection);
   };
 
   const arrangeBudgets = () => {
-    let userBudgets = [];
     let budgetNames = [];
-    if (
-      user.budgets &&
-      user.budgets.length !== 0 &&
-      budgets &&
-      budgets.length !== 0
-    ) {
-      for (const budget of budgets) {
-        for (const item of user.budgets) {
-          if (budget._id === item) {
-            userBudgets.push(budget);
-          }
-        }
+    if (budgets) {
+      for (const item of budgets) {
+        budgetNames.push(item.name);
       }
-    }
 
-    for (const item of userBudgets) {
-      budgetNames.push(item.name);
+      return budgetNames;
     }
-
-    return { userBudgets, budgetNames };
   };
 
-  const { userBudgets, budgetNames } = arrangeBudgets();
+  const budgetNames = arrangeBudgets();
 
   const chosenBudget = () => {
-    for (const budget of userBudgets) {
-      if (budget.name === selected) {
-        return budget;
+    if (budgets) {
+      for (const budget of budgets) {
+        if (budget.name === selected) {
+          return budget;
+        }
       }
     }
   };

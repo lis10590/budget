@@ -13,6 +13,8 @@ export async function GET(req) {
   try {
     const user = await User.findById(userId).populate("budgets");
 
+    console.log(user);
+
     return NextResponse.json(user.budgets, { status: 200 });
   } catch (err) {
     return NextResponse.json(
