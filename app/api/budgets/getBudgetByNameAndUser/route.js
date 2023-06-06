@@ -2,7 +2,6 @@ import User from "@/app/_utils/schemas/User";
 import Budget from "@/app/_utils/schemas/Budget";
 import connectDB from "@/app/_utils/db";
 import { NextResponse } from "next/server";
-import { use } from "react";
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 
@@ -20,10 +19,11 @@ export async function GET(req) {
     if (user) {
       for (const item of user.budgets) {
         if (item.name === budgetName) {
-          const data = await Budget.findById(item._id)
+          const budget = await Budget.findById(item._id)
             .populate("expenses")
             .populate("incomes");
-          return NextResponse.json(data, {
+
+          return NextResponse.json(budget, {
             status: 200,
           });
         }

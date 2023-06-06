@@ -2,7 +2,7 @@
 import { Modal, Form, FormGroup, Button, CloseButton } from "react-bootstrap";
 import DropdownMenu from "./dropdownMenu";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { incomeAddition } from "../_utils/store/incomes";
 import DatePicker from "react-datepicker";
 
@@ -24,7 +24,23 @@ const AddExpense = (props) => {
     sum: 0,
     date: "",
   });
+  const budget = useSelector((state) => state.budgets.budget);
 
+  const predefinedIncomesCategories = () => {
+    let arr = [];
+    if (
+      budget &&
+      budget.predefinedIncomes &&
+      budget.predefinedIncomes.length !== 0
+    ) {
+      for (const income of budget.predefinedIncomes) {
+        arr.push(income.category);
+      }
+    }
+    return arr;
+  };
+
+  const predefinedIncomes = predefinedIncomesCategories();
   const handleSelection = (selection) => {
     setSelected(selection);
   };
@@ -90,7 +106,7 @@ const AddExpense = (props) => {
             </FormGroup>
             <p className="text-center mt-2">קטגוריה</p>
             <DropdownMenu
-              menuOptions={props.incomes}
+              menuOptions={predefinedIncomes}
               selected={handleSelection}
             />
 

@@ -191,7 +191,7 @@ const budgetSlice = createSlice({
       .addCase(expenseAdditionToBudget.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.budgets = action.payload;
+        state.budget = action.payload;
       })
       .addCase(expenseAdditionToBudget.rejected, (state, action) => {
         state.isLoading = false;
@@ -205,7 +205,7 @@ const budgetSlice = createSlice({
       .addCase(incomeAdditionToBudget.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.budgets = action.payload;
+        state.budget = action.payload;
       })
       .addCase(incomeAdditionToBudget.rejected, (state, action) => {
         state.isLoading = false;
