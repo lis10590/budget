@@ -6,6 +6,7 @@ import {
   addExpenseToBudget,
   addIncomeToBudget,
   getBudgetsByUser,
+  getBudgetByNameAndUser,
 } from "../requests/budgets";
 
 const initialBudgetState = {
@@ -120,6 +121,22 @@ export const getAllBudgetsByUser = createAsyncThunk(
     }
   }
 );
+export const getBudgetByName = createAsyncThunk(
+  "budgets/getBudgetByNameAndUser",
+  async (obj, thunkAPI) => {
+    try {
+      return await getBudgetByNameAndUser(obj);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 const budgetSlice = createSlice({
   name: "budgets",
   initialState: initialBudgetState,
@@ -205,6 +222,20 @@ const budgetSlice = createSlice({
         state.budgetsByUser = action.payload;
       })
       .addCase(getAllBudgetsByUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getBudgetByName.pending, (state, action) => {
+        state.isLoading = true;
+      })
+
+      .addCase(getBudgetByName.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.budget = action.payload;
+      })
+      .addCase(getBudgetByName.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

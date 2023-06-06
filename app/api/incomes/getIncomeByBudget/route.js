@@ -10,16 +10,14 @@ export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const budgetId = searchParams.get("budgetId");
   try {
-    const expensesByBudget = await Budget.findById(budgetId).populate(
-      "expenses"
-    );
+    const incomesByBudget = await Budget.findById(budgetId).populate("incomes");
 
-    return NextResponse.json(expensesByBudget.expenses, {
+    return NextResponse.json(incomesByBudget.incomes, {
       status: 200,
     });
   } catch (err) {
     return NextResponse.json(
-      { err, message: "getting expenses failed" },
+      { err, message: "getting incomes failed" },
       { status: 400 }
     );
   }

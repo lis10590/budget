@@ -12,11 +12,21 @@ import AddIncome from "../_components/addIncome";
 import { modalActions } from "../_utils/store/modal";
 import DropdownMenu from "../_components/dropdownMenu";
 import { getAllBudgetsByUser } from "../_utils/store/budgets";
-import { getAllExpenses, selectAllExpenses } from "../_utils/store/expenses";
-import { getAllIncomes, selectAllIncomes } from "../_utils/store/incomes";
+import {
+  getAllExpenses,
+  selectAllExpenses,
+  getAllExpensesByBudget,
+} from "../_utils/store/expenses";
+import {
+  getAllIncomes,
+  selectAllIncomes,
+  getAllIncomesByBudget,
+} from "../_utils/store/incomes";
 import {
   expenseAdditionToBudget,
+  incomeAdditionToBudget,
   getAllBudgets,
+  getBudgetByName,
 } from "../_utils/store/budgets";
 
 const Home = () => {
@@ -32,21 +42,27 @@ const Home = () => {
     const data = await dispatch(getAllBudgetsByUser(loggedUser.payload._id));
     console.log(data);
   };
-  useEffect(() => {
-    dispatch(getAllBudgets());
-    dispatch(getAllExpenses());
-    dispatch(getAllIncomes());
-    if (email) {
-      getUserAndBudgets();
-    }
-  }, [dispatch, email]);
 
   const addExpenses = useSelector((state) => state.modal.addExpensesModalOpen);
   const addIncomes = useSelector((state) => state.modal.addIncomesModalOpen);
-  const expenses = useSelector(selectAllExpenses);
-  const incomes = useSelector(selectAllIncomes);
   const budgets = useSelector((state) => state.budgets.budgetsByUser);
-  console.log(budgets);
+  const budget = useSelector((state) => state.budgets.budget);
+
+  useEffect(() => {
+    dispatch(getAllBudgets());
+    // dispatch(getAllExpenses());
+    // dispatch(getAllIncomes());
+    if (email) {
+      getUserAndBudgets();
+    }
+    if (selected && user) {
+      const obj = {
+        userId: user._id,
+        budgetName: selected,
+      };
+      dispatch(getBudgetByName(obj));
+    }
+  }, [dispatch, email, selected]);
 
   const handleSelection = (selection) => {
     setSelected(selection);
@@ -65,21 +81,10 @@ const Home = () => {
 
   const budgetNames = arrangeBudgets();
 
-  const chosenBudget = () => {
-    if (budgets) {
-      for (const budget of budgets) {
-        if (budget.name === selected) {
-          return budget;
-        }
-      }
-    }
-  };
-  const selectedBudget = chosenBudget();
-
   const arrangeExpenses = () => {
     let arr = [];
-    if (selectedBudget) {
-      for (const item of selectedBudget.predefinedExpenses) {
+    if (budget && budget.predefinedExpenses) {
+      for (const item of budget.predefinedExpenses) {
         arr.push(item.category);
       }
       return arr;
@@ -88,8 +93,8 @@ const Home = () => {
 
   const arrangeIncomes = () => {
     let arr = [];
-    if (selectedBudget) {
-      for (const item of selectedBudget.predefinedIncomes) {
+    if (budget && budget.predefinedIncomes) {
+      for (const item of budget.predefinedIncomes) {
         arr.push(item.category);
       }
       return arr;
@@ -117,11 +122,19 @@ const Home = () => {
 
   const addExpenseToBudget = (expenseId) => {
     const obj = {
-      budgetId: selectedBudget._id,
+      budgetId: budget._id,
       expenseId,
     };
 
     dispatch(expenseAdditionToBudget(obj));
+  };
+
+  const addIncomeToBudget = (incomeId) => {
+    const obj = {
+      budgetId: budget._id,
+      incomeId,
+    };
+    dispatch(incomeAdditionToBudget(obj));
   };
 
   return (
@@ -154,8 +167,8 @@ const Home = () => {
           </tr>
         </thead>
         <tbody>
-          {expenses
-            ? expenses.map((item) => {
+          {budget && budget.expenses
+            ? budget.expenses.map((item) => {
                 return (
                   <tr className="text-right" key={item._id}>
                     <td>{item.balance}</td>
@@ -163,6 +176,30 @@ const Home = () => {
                     <td>{item.category}</td>
                     <td>{new Date(item.date).toLocaleDateString("en-GB")}</td>
                     <td>{item.expenseName}</td>
+                  </tr>
+                );
+              })
+            : null}
+        </tbody>
+      </Table>
+      <Table size="sm">
+        <thead>
+          <tr className="text-right">
+            <th>תקציב</th>
+            <th>קטגוריה</th>
+            <th>תאריך</th>
+            <th>שם הכנסה</th>
+          </tr>
+        </thead>
+        <tbody>
+          {budget && budget.incomes
+            ? budget.incomes.map((item) => {
+                return (
+                  <tr className="text-right" key={item._id}>
+                    <td>{item.sum}</td>
+                    <td>{item.category}</td>
+                    <td>{new Date(item.date).toLocaleDateString("en-GB")}</td>
+                    <td>{item.incomeName}</td>
                   </tr>
                 );
               })
@@ -180,6 +217,7 @@ const Home = () => {
         isOpen={addIncomes}
         onClose={closeIncomeModalHandler}
         incomes={predefinedIncomes}
+        incomeId={addIncomeToBudget}
       />
     </div>
   );

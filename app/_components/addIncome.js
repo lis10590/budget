@@ -4,6 +4,7 @@ import DropdownMenu from "./dropdownMenu";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { incomeAddition } from "../_utils/store/incomes";
+import DatePicker from "react-datepicker";
 
 const AddExpense = (props) => {
   const dispatch = useDispatch();
@@ -14,12 +15,14 @@ const AddExpense = (props) => {
     incomeName: "",
     category: "",
     sum: 0,
+    date: "",
   });
 
   const [customInputs, setCustomInputs] = useState({
     incomeName: "",
     category: "",
     sum: 0,
+    date: "",
   });
 
   const handleSelection = (selection) => {
@@ -51,15 +54,19 @@ const AddExpense = (props) => {
     setShowCustom(false);
     setShowIncomes(true);
   };
-  const onSaveClick = () => {
+  const onSaveClick = async () => {
     if (showIncomes) {
       const obj = {
         ...inputs,
         category: selected,
       };
-      dispatch(incomeAddition(obj));
+      const newIncome = await dispatch(incomeAddition(obj));
+      props.incomeId(newIncome.payload._id);
+      props.onClose();
     } else if (showCustom) {
-      dispatch(incomeAddition(customInputs));
+      const newIncome = await dispatch(incomeAddition(customInputs));
+      props.incomeId(newIncome.payload._id);
+      props.onClose();
     }
   };
 
@@ -97,6 +104,14 @@ const AddExpense = (props) => {
                 onChange={onChangeInputs}
               />
             </FormGroup>
+            <div className="position-relative" style={{ left: "9rem" }}>
+              <DatePicker
+                className="text-center  mt-3"
+                placeholderText="תאריך"
+                selected={inputs.date}
+                onChange={(date) => setInputs({ ...inputs, date })}
+              />
+            </div>
             <div className="d-flex justify-content-center">
               <Button className="mt-3" onClick={onAddCustom}>
                 הוספת הכנסה לא מהרשימה{" "}
@@ -140,6 +155,14 @@ const AddExpense = (props) => {
                 onChange={onChangeCustomInputs}
               />
             </FormGroup>
+            <div className="position-relative" style={{ left: "9rem" }}>
+              <DatePicker
+                className="text-center mt-3"
+                placeholderText="תאריך"
+                selected={customInputs.date}
+                onChange={(date) => setCustomInputs({ ...customInputs, date })}
+              />
+            </div>
           </div>
         )}
 

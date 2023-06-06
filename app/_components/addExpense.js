@@ -63,8 +63,11 @@ const AddExpense = (props) => {
       };
       const newExpense = await dispatch(expenseAddition(obj));
       props.expenseId(newExpense.payload._id);
+      props.onClose();
     } else if (showCustom) {
-      dispatch(expenseAddition(customInputs));
+      const newExpense = await dispatch(expenseAddition(customInputs));
+      props.expenseId(newExpense.payload._id);
+      props.onClose();
     }
   };
 

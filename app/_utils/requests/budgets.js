@@ -62,3 +62,15 @@ export const getBudgetsByUser = async (userId) => {
     console.error(err);
   }
 };
+
+export const getBudgetByNameAndUser = async (obj) => {
+  try {
+    const res = await axios.get(
+      `${apiUrl}/api/budgets/getBudgetByNameAndUser`,
+      { params: obj }
+    );
+    return res.data;
+  } catch (err) {
+    console.error(err);
+  }
+};
