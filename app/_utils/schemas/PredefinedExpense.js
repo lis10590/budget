@@ -7,7 +7,7 @@ const predefinedExpenseSchema = new Schema({
 });
 
 const PredefinedExpense =
-  models.PredefinedExpense ||
-  model("PredefinedExpense", predefinedExpenseSchema);
+  models.Predefinedexpense ||
+  model("Predefinedexpense", predefinedExpenseSchema);
 
 export default PredefinedExpense;

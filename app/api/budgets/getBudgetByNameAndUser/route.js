@@ -9,27 +9,21 @@ export async function GET(req) {
   await connectDB();
 
   const { searchParams } = new URL(req.url);
-  const userId = searchParams.get("userId");
-
-  const budgetName = searchParams.get("budgetName");
+  const budgetId = searchParams.get("budgetId");
+  console.log(budgetId);
 
   try {
-    const user = await User.findById(userId).populate("budgets");
+    const budget = await Budget.findById(budgetId)
+      .populate("expenses")
+      .populate("incomes")
+      .populate("predefinedExpenses")
+      .populate("predefinedIncomes");
 
-    if (user) {
-      for (const item of user.budgets) {
-        if (item.name === budgetName) {
-          const budget = await Budget.findById(item._id)
-            .populate("expenses")
-            .populate("incomes")
-            .populate("predefinedExpenses")
-            .populate("predefinedIncomes");
-          return NextResponse.json(data, {
-            status: 200,
-          });
-        }
-      }
-    }
+    console.log(budget);
+
+    return NextResponse.json(budget, {
+      status: 200,
+    });
   } catch (err) {
     return NextResponse.json(
       { err, message: "getting budget failed" },

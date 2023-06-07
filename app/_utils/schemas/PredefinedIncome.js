@@ -6,6 +6,6 @@ const predefinedIncomeSchema = new Schema({
 });
 
 const PredefinedIncome =
-  models.PredefinedIncome || model("PredefinedIncome", predefinedIncomeSchema);
+  models.Predefinedincome || model("Predefinedincome", predefinedIncomeSchema);
 
 export default PredefinedIncome;

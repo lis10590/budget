@@ -63,11 +63,10 @@ export const getBudgetsByUser = async (userId) => {
   }
 };
 
-export const getBudgetByNameAndUser = async (obj) => {
+export const getBudgetByNameAndUser = async (budgetId) => {
   try {
     const res = await axios.get(
-      `${apiUrl}/api/budgets/getBudgetByNameAndUser`,
-      { params: obj }
+      `${apiUrl}/api/budgets/getBudgetByNameAndUser?budgetId=${budgetId}`
     );
     return res.data;
   } catch (err) {

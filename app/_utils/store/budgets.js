@@ -14,8 +14,7 @@ import {
 const initialBudgetState = {
   budgets: [],
   budgetsByUser: [],
-  budget: {},
-
+  budget: [],
   isLoading: false,
   isError: false,
   isSuccess: false,

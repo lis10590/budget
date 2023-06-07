@@ -37,6 +37,24 @@ const Home = () => {
     console.log(data);
   };
 
+  const populateBudget = () => {
+    let id;
+    if (budgets) {
+      for (const budget of budgets) {
+        if (budget.name === selected) {
+          id = budget._id;
+        }
+      }
+
+      const obj = {
+        budgetId: id,
+        userId: user._id,
+      };
+
+      dispatch(getBudgetByName(obj));
+    }
+  };
+
   const addExpenses = useSelector((state) => state.modal.addExpensesModalOpen);
   const addIncomes = useSelector((state) => state.modal.addIncomesModalOpen);
   const budgets = useSelector((state) => state.budgets.budgetsByUser);
@@ -53,11 +71,7 @@ const Home = () => {
 
   useEffect(() => {
     if (selected && user) {
-      const obj = {
-        userId: user._id,
-        budgetName: selected,
-      };
-      dispatch(getBudgetByName(obj));
+      populateBudget();
     }
   }, [selected]);
 
