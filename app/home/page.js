@@ -49,6 +49,9 @@ const Home = () => {
     if (email) {
       getUserAndBudgets();
     }
+  }, [dispatch, email]);
+
+  useEffect(() => {
     if (selected && user) {
       const obj = {
         userId: user._id,
@@ -56,7 +59,7 @@ const Home = () => {
       };
       dispatch(getBudgetByName(obj));
     }
-  }, [dispatch, email, selected]);
+  }, [selected]);
 
   const handleSelection = (selection) => {
     setSelected(selection);
@@ -74,29 +77,6 @@ const Home = () => {
   };
 
   const budgetNames = arrangeBudgets();
-
-  const arrangeExpenses = () => {
-    let arr = [];
-    if (budget && budget.predefinedExpenses) {
-      for (const item of budget.predefinedExpenses) {
-        arr.push(item.category);
-      }
-      return arr;
-    } else return null;
-  };
-
-  const arrangeIncomes = () => {
-    let arr = [];
-    if (budget && budget.predefinedIncomes) {
-      for (const item of budget.predefinedIncomes) {
-        arr.push(item.category);
-      }
-      return arr;
-    } else return null;
-  };
-
-  const predefinedExpenses = arrangeExpenses();
-  const predefinedIncomes = arrangeIncomes();
 
   const addExpenseModalHandler = () => {
     dispatch(modalActions.addExpensesModalOpen());
@@ -221,7 +201,6 @@ const Home = () => {
       <AddExpense
         isOpen={addExpenses}
         onClose={closeExpenseModalHandler}
-        expenses={predefinedExpenses}
         user={user}
         expenseId={addExpenseToBudget}
         updateBalance={updateBalance}
@@ -229,7 +208,6 @@ const Home = () => {
       <AddIncome
         isOpen={addIncomes}
         onClose={closeIncomeModalHandler}
-        incomes={predefinedIncomes}
         incomeId={addIncomeToBudget}
       />
     </div>

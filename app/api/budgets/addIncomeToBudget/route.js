@@ -8,11 +8,17 @@ export async function PUT(req) {
   await connectDB();
   const { incomeId, budgetId } = await req.json();
   try {
-    const budget = await Budget.findByIdAndUpdate(budgetId, {
-      $push: {
-        incomes: incomeId,
+    const budget = await Budget.findByIdAndUpdate(
+      budgetId,
+      {
+        $push: {
+          incomes: incomeId,
+        },
       },
-    });
+      { new: true }
+    )
+      .populate("incomes")
+      .populate("expenses");
 
     return NextResponse.json(budget, {
       status: 200,

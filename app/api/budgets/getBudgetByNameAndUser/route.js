@@ -19,7 +19,7 @@ export async function GET(req) {
     if (user) {
       for (const item of user.budgets) {
         if (item.name === budgetName) {
-          const data = await Budget.findById(item._id)
+          const budget = await Budget.findById(item._id)
             .populate("expenses")
             .populate("incomes")
             .populate("predefinedExpenses")
