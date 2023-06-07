@@ -12,22 +12,16 @@ import AddIncome from "../_components/addIncome";
 import { modalActions } from "../_utils/store/modal";
 import DropdownMenu from "../_components/dropdownMenu";
 import { getAllBudgetsByUser } from "../_utils/store/budgets";
-import {
-  getAllExpenses,
-  selectAllExpenses,
-  getAllExpensesByBudget,
-} from "../_utils/store/expenses";
-import {
-  getAllIncomes,
-  selectAllIncomes,
-  getAllIncomesByBudget,
-} from "../_utils/store/incomes";
+import { getAllExpenses } from "../_utils/store/expenses";
+import { getAllIncomes } from "../_utils/store/incomes";
 import {
   expenseAdditionToBudget,
   incomeAdditionToBudget,
   getAllBudgets,
   getBudgetByName,
 } from "../_utils/store/budgets";
+
+import { updateExpenseBalance } from "../_utils/store/predefinedExpenses";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -50,8 +44,8 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(getAllBudgets());
-    // dispatch(getAllExpenses());
-    // dispatch(getAllIncomes());
+    dispatch(getAllExpenses());
+    dispatch(getAllIncomes());
     if (email) {
       getUserAndBudgets();
     }
@@ -137,6 +131,24 @@ const Home = () => {
     dispatch(incomeAdditionToBudget(obj));
   };
 
+  const updateBalance = (category, sum) => {
+    let newBalance;
+    let expenseId;
+    for (const item of budget.predefinedExpenses) {
+      if (item.category === category) {
+        expenseId = item._id;
+        newBalance = Number(item.sum) - Number(sum);
+      }
+    }
+    if (newBalance) {
+      const obj = {
+        expenseId,
+        newBalance,
+      };
+      dispatch(updateExpenseBalance(obj));
+    }
+  };
+
   return (
     <div
       className={`${styles.mainDiv} mt-5 d-flex flex-column align-items-center`}
@@ -212,6 +224,7 @@ const Home = () => {
         expenses={predefinedExpenses}
         user={user}
         expenseId={addExpenseToBudget}
+        updateBalance={updateBalance}
       />
       <AddIncome
         isOpen={addIncomes}

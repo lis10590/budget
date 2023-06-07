@@ -8,20 +8,9 @@ const budgetSchema = new Schema({
   expenses: [{ type: Schema.Types.ObjectId, ref: "Expense" }],
   incomes: [{ type: Schema.Types.ObjectId, ref: "Income" }],
   predefinedExpenses: [
-    {
-      _id: false,
-      category: { type: String },
-      sum: { type: Number },
-      balance: { type: Number },
-    },
+    { type: Schema.Types.ObjectId, ref: "PredefinedExpense" },
   ],
-  predefinedIncomes: [
-    {
-      _id: false,
-      category: { type: String },
-      sum: { type: Number },
-    },
-  ],
+  predefinedIncomes: [{ type: Schema.Types.ObjectId, ref: "PredefinedIncome" }],
 });
 
 const Budget = models.Budget || model("Budget", budgetSchema);

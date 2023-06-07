@@ -63,6 +63,7 @@ const AddExpense = (props) => {
       };
       const newExpense = await dispatch(expenseAddition(obj));
       props.expenseId(newExpense.payload._id);
+      props.updateBalance(selected, inputs.sum);
       props.onClose();
     } else if (showCustom) {
       const newExpense = await dispatch(expenseAddition(customInputs));

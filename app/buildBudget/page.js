@@ -22,6 +22,8 @@ import { useSession } from "next-auth/react";
 import { modalActions } from "../_utils/store/modal";
 import styles from "../_styles/budget.module.css";
 import UpdateComp from "../_components/updateComp";
+import { predefinedExpenseAddition } from "../_utils/store/predefinedExpenses";
+import { predefinedIncomeAddition } from "../_utils/store/predefinedIncomes";
 
 const BuildBudget = () => {
   const dispatch = useDispatch();
@@ -125,10 +127,21 @@ const BuildBudget = () => {
 
   const saveBudget = async () => {
     const { incomesAmount, expensesAmount, balace } = totalAmountCalc();
+    let predefinedExpensesArr = [];
+    let predefinedIncomesArr = [];
+    for (const item of expenses) {
+      const predefExpense = await dispatch(predefinedExpenseAddition(item));
+      predefinedExpensesArr.push(predefExpense.payload._id);
+    }
+
+    for (const item2 of incomes) {
+      const predefIncome = await dispatch(predefinedIncomeAddition(item2));
+      predefinedIncomesArr.push(predefIncome.payload._id);
+    }
 
     const obj = {
-      predefinedExpenses: expenses,
-      predefinedIncomes: incomes,
+      predefinedExpenses: predefinedExpensesArr,
+      predefinedIncomes: predefinedIncomesArr,
       name: budgetName,
       incomesAmount,
       expensesAmount,
@@ -162,9 +175,9 @@ const BuildBudget = () => {
                 </tr>
               </thead>
               <tbody>
-                {expenses.map((expense) => {
+                {expenses.map((expense, index) => {
                   return (
-                    <tr>
+                    <tr key={index}>
                       <td>
                         <FontAwesomeIcon
                           icon={faPenToSquare}
@@ -187,9 +200,9 @@ const BuildBudget = () => {
                 </tr>
               </thead>
               <tbody>
-                {incomes.map((income) => {
+                {incomes.map((income, index) => {
                   return (
-                    <tr>
+                    <tr key={index}>
                       <td>
                         <FontAwesomeIcon
                           icon={faPenToSquare}
@@ -219,6 +232,7 @@ const BuildBudget = () => {
 
             <Tabs
               className="mt-5 mb-5 justify-content-end"
+              id="controlled-tab-example"
               activeKey={key}
               onSelect={(k) => setKey(k)}
             >

@@ -74,3 +74,27 @@ export const getBudgetByNameAndUser = async (obj) => {
     console.error(err);
   }
 };
+
+export const addPredefinedExpenseToBudget = async (obj) => {
+  try {
+    const res = await axios.put(
+      `${apiUrl}/api/budgets/addPredefinedExpense`,
+      obj
+    );
+    return res.data;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const addPredefinedIncomeToBudget = async (obj) => {
+  try {
+    const res = await axios.put(
+      `${apiUrl}/api/budgets/addPredefinedIncome`,
+      obj
+    );
+    return res.data;
+  } catch (err) {
+    console.error(err);
+  }
+};
