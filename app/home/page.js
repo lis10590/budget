@@ -1,6 +1,6 @@
 "use client";
 import { Table, Button } from "react-bootstrap";
-import styles from "../_styles/status.module.css";
+import styles from "../_styles/home.module.css";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserByEmail } from "../_utils/store/users";
@@ -46,12 +46,7 @@ const Home = () => {
         }
       }
 
-      const obj = {
-        budgetId: id,
-        userId: user._id,
-      };
-
-      dispatch(getBudgetByName(obj));
+      dispatch(getBudgetByName(id));
     }
   };
 
@@ -81,6 +76,7 @@ const Home = () => {
 
   const arrangeBudgets = () => {
     let budgetNames = [];
+
     if (budgets) {
       for (const item of budgets) {
         budgetNames.push(item.name);
@@ -128,10 +124,16 @@ const Home = () => {
   const updateBalance = (category, sum) => {
     let newBalance;
     let expenseId;
+
     for (const item of budget.predefinedExpenses) {
       if (item.category === category) {
         expenseId = item._id;
-        newBalance = Number(item.sum) - Number(sum);
+
+        if (item.balance === item.sum) {
+          newBalance = Number(item.sum) - Number(sum);
+        } else {
+          newBalance = Number(item.balance) - Number(sum);
+        }
       }
     }
     if (newBalance) {
@@ -165,8 +167,7 @@ const Home = () => {
       <Table size="sm">
         <thead>
           <tr className="text-right">
-            <th>יתרה</th>
-            <th>תקציב</th>
+            <th>סכום</th>
             <th>קטגוריה</th>
             <th>תאריך</th>
             <th>שם הוצאה</th>
@@ -177,7 +178,6 @@ const Home = () => {
             ? budget.expenses.map((item) => {
                 return (
                   <tr className="text-right" key={item._id}>
-                    <td>{item.balance}</td>
                     <td>{item.sum}</td>
                     <td>{item.category}</td>
                     <td>{new Date(item.date).toLocaleDateString("en-GB")}</td>
@@ -191,7 +191,7 @@ const Home = () => {
       <Table size="sm">
         <thead>
           <tr className="text-right">
-            <th>תקציב</th>
+            <th>סכום</th>
             <th>קטגוריה</th>
             <th>תאריך</th>
             <th>שם הכנסה</th>

@@ -11,7 +11,15 @@ export async function GET(req) {
   const userId = searchParams.get("userId");
 
   try {
-    const user = await User.findById(userId).populate("budgets");
+    const user = await User.findById(userId).populate({
+      path: "budgets",
+      populate: [
+        { path: "expenses", model: "Expense" },
+        { path: "incomes", model: "Income" },
+        { path: "predefinedExpenses", model: "PredefinedExpense" },
+        { path: "predefinedIncomes", model: "PredefinedIncome" },
+      ],
+    });
 
     return NextResponse.json(user.budgets, { status: 200 });
   } catch (err) {
