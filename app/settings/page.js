@@ -13,7 +13,7 @@ const Settings = () => {
   const { data } = useSession();
   const dispatch = useDispatch();
   const email = data?.user?.email;
-
+  const [chosenBudget, setChosenBudget] = useState("");
   const budgets = useSelector((state) => state.budgets.budgetsByUser);
   const budget = useSelector((state) => state.budgets.budget);
   const chooseBudgetModal = useSelector(
@@ -27,14 +27,14 @@ const Settings = () => {
     const data = await dispatch(getAllBudgetsByUser(loggedUser.payload._id));
     console.log(data);
     dispatch(getBudgetById(loggedUser.payload.chosenBudget));
+    setChosenBudget(budget.name);
   };
 
   useEffect(() => {
     if (email) {
       getUserAndBudgets();
-      dispatch(getUserByEmail(email));
     }
-  }, [dispatch, email]);
+  }, [dispatch, email, chosenBudget]);
 
   const chooseBudgetModalOpen = () => {
     dispatch(modalActions.chooseBudgetModalOpen());
@@ -57,6 +57,10 @@ const Settings = () => {
   };
 
   const budgetNames = arrangeBudgets();
+
+  const chooseBudgetHandler = (name) => {
+    setChosenBudget(name);
+  };
   return (
     <div className={`${styles.mainDiv} mt-5`}>
       <Card>
@@ -67,15 +71,14 @@ const Settings = () => {
             <Button className="mt-3 mb-3">שנה סיסמא</Button>
             <Button onClick={chooseBudgetModalOpen}>בחר תקציב</Button>
           </div>
-          <p className="text-end mt-3">
-            תקציב נבחר : {budget ? budget.name : null}
-          </p>
+          <p className="text-end mt-3">תקציב נבחר : {chosenBudget}</p>
         </Card.Body>
       </Card>
       <ChooseBudget
         isOpen={chooseBudgetModal}
         onClose={chooseBudgetModalClose}
         budgetNames={budgetNames}
+        budget={chooseBudgetHandler}
         user={user}
       />
     </div>

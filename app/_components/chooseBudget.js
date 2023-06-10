@@ -23,6 +23,8 @@ const ChooseBudget = (props) => {
         budgetId: chosenBud.payload[0]._id,
       };
 
+      props.budget(chosenBud.payload[0].name);
+
       dispatch(chosenBudgetAddition(obj));
       props.onClose();
     }
