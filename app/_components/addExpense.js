@@ -27,15 +27,12 @@ const AddExpense = (props) => {
   });
 
   const budget = useSelector((state) => state.budgets.budget);
+  const user = useSelector((state) => state.users.user);
   console.log(budget);
 
   const predefinedExpensesCategories = () => {
     let arr = [];
-    if (
-      budget &&
-      budget.predefinedExpenses &&
-      budget.predefinedExpenses.length !== 0
-    ) {
+    if (budget && budget.predefinedExpenses) {
       for (const expense of budget.predefinedExpenses) {
         arr.push(expense.category);
       }

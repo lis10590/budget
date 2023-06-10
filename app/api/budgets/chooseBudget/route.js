@@ -12,10 +12,10 @@ export async function GET(req) {
   await connectDB();
 
   const { searchParams } = new URL(req.url);
-  const budgetId = searchParams.get("budgetId");
+  const budgetName = searchParams.get("budgetName");
 
   try {
-    const budget = await Budget.findById(budgetId)
+    const budget = await Budget.find({ name: budgetName })
       .populate({
         path: "expenses",
       })
@@ -26,6 +26,7 @@ export async function GET(req) {
       status: 200,
     });
   } catch (err) {
+    console.log(err);
     return NextResponse.json(
       { err, message: "getting budget failed" },
       { status: 400 }

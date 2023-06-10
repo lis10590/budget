@@ -97,3 +97,14 @@ export const addPredefinedIncomeToBudget = async (obj) => {
     console.error(err);
   }
 };
+
+export const chooseBudget = async (budget) => {
+  try {
+    const res = await axios.get(
+      `${apiUrl}/api/budgets/chooseBudget?budgetName=${budget}`
+    );
+    return res.data;
+  } catch (err) {
+    console.error(err);
+  }
+};

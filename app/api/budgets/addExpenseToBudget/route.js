@@ -1,3 +1,7 @@
+import { Expense } from "@/app/_utils/schemas";
+import Income from "@/app/_utils/schemas";
+import PredefinedExpense from "@/app/_utils/schemas";
+import PredefinedIncome from "@/app/_utils/schemas";
 import Budget from "@/app/_utils/schemas/Budget";
 import connectDB from "@/app/_utils/db";
 import { NextResponse } from "next/server";
@@ -19,8 +23,12 @@ export async function PUT(req) {
       },
       { new: true }
     )
-      .populate("incomes")
-      .populate("expenses");
+      .populate({
+        path: "expenses",
+      })
+      .populate({ path: "incomes" })
+      .populate({ path: "predefinedExpenses" })
+      .populate({ path: "predefinedIncomes" });
 
     return NextResponse.json(budget, {
       status: 200,

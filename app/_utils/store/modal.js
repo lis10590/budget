@@ -4,6 +4,7 @@ const initialModalState = {
   addExpensesModalOpen: false,
   addIncomesModalOpen: false,
   updateComponentModalOpen: false,
+  chooseBudgetModalOpen: false,
 };
 const modalSlice = createSlice({
   name: "modal",
@@ -26,6 +27,12 @@ const modalSlice = createSlice({
     },
     updateComponentModalClose(state) {
       state.updateComponentModalOpen = false;
+    },
+    chooseBudgetModalOpen(state) {
+      state.chooseBudgetModalOpen = true;
+    },
+    chooseBudgetModalClose(state) {
+      state.chooseBudgetModalOpen = false;
     },
   },
 });

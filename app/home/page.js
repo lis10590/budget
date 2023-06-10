@@ -19,6 +19,7 @@ import {
   incomeAdditionToBudget,
   getAllBudgets,
   getBudgetByName,
+  getBudgetById,
 } from "../_utils/store/budgets";
 
 import { updateExpenseBalance } from "../_utils/store/predefinedExpenses";
@@ -34,7 +35,8 @@ const Home = () => {
     const loggedUser = await dispatch(getUserByEmail(email));
 
     const data = await dispatch(getAllBudgetsByUser(loggedUser.payload._id));
-    console.log(data);
+
+    dispatch(getBudgetById(loggedUser.payload.chosenBudget));
   };
 
   const populateBudget = () => {
@@ -61,6 +63,7 @@ const Home = () => {
     dispatch(getAllIncomes());
     if (email) {
       getUserAndBudgets();
+      dispatch(getUserByEmail(email));
     }
   }, [dispatch, email]);
 
@@ -151,7 +154,7 @@ const Home = () => {
     >
       <div className="d-flex flex-column">
         <p className="text-center">תקציב נבחר</p>
-        <DropdownMenu menuOptions={budgetNames} selected={handleSelection} />
+        {budget && budget !== undefined ? budget.name : null}
       </div>
       <div className="d-flex mt-3">
         <Button className="mb-5 me-3" onClick={addExpenseModalHandler}>
@@ -198,7 +201,7 @@ const Home = () => {
           </tr>
         </thead>
         <tbody>
-          {budget && budget.incomes
+          {budget && budget.expenses
             ? budget.incomes.map((item) => {
                 return (
                   <tr className="text-right" key={item._id}>

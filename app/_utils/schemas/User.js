@@ -6,6 +6,7 @@ const userSchema = new Schema({
   lastName: { type: String },
   password: { type: String },
   budgets: [{ type: Schema.Types.ObjectId, ref: "Budget" }],
+  chosenBudget: { type: Schema.Types.ObjectId, ref: "Budget" },
 });
 
 const User = models.User || model("User", userSchema);

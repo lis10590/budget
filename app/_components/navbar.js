@@ -42,6 +42,11 @@ const NavbarComp = () => {
                   קטגוריות
                 </Link>
               </Nav.Item>
+              <Nav.Item>
+                <Link className={`${styles.navbarLink} me-3`} href="/settings">
+                  הגדרות
+                </Link>
+              </Nav.Item>
             </Nav>
           )}
 
@@ -54,7 +59,10 @@ const NavbarComp = () => {
                   </Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Link className={`${styles.navbarLink} me-3`} href="/">
+                  <Link
+                    className={`${styles.navbarLink} me-3`}
+                    href="/register"
+                  >
                     הרשם
                   </Link>
                 </Nav.Item>

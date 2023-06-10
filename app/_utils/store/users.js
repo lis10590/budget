@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getUser, addBudgetToUser } from "../requests/users";
+import { getUser, addBudgetToUser, addChosenBudget } from "../requests/users";
 
 const initialUsersState = {
   users: [],
   user: {},
+  chosenBudget: {},
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -44,6 +45,23 @@ export const budgetAdditionToUser = createAsyncThunk(
   }
 );
 
+export const chosenBudgetAddition = createAsyncThunk(
+  "users/addChosenBudget",
+  async (obj, thunkAPI) => {
+    try {
+      return await addChosenBudget(obj);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "users",
   initialState: initialUsersState,
@@ -71,6 +89,18 @@ const userSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(budgetAdditionToUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.message = action.payload;
+      })
+      .addCase(chosenBudgetAddition.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(chosenBudgetAddition.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.chosenBudget = action.payload;
+      })
+      .addCase(chosenBudgetAddition.rejected, (state, action) => {
         state.isLoading = false;
         state.message = action.payload;
       });
