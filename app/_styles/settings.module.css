@@ -1,0 +1,37 @@
+.mainDiv {
+  margin: auto;
+}
+
+.cardHeader {
+  background-color: #c2dedc;
+  font-weight: bold;
+}
+
+.button {
+  /* background-image: linear-gradient(to right, #c2dedc, #ece5c7); */
+  background-color: #c0cfb4;
+  border: #c0cfb4;
+  color: black;
+  font-weight: bold;
+}
+
+.button:hover {
+  background-color: #99a98f;
+}
+
+.modalHeader {
+  background-image: linear-gradient(to right, #c2dedc, #ece5c7);
+  font-weight: bold;
+}
+
+@media (max-width: 480px) {
+  .mainDiv {
+    width: 20rem;
+  }
+}
+
+@media (min-width: 480px) {
+  .mainDiv {
+    width: 30rem;
+  }
+}

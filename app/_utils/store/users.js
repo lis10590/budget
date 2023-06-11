@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getUser, updateExpense, updateIncome } from "../requests/users";
+import { getUser, addBudgetToUser, addChosenBudget } from "../requests/users";
 
 const initialUsersState = {
   users: [],
   user: {},
+  chosenBudget: {},
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -27,11 +28,11 @@ export const getUserByEmail = createAsyncThunk(
   }
 );
 
-export const updateOneExpense = createAsyncThunk(
-  "users/updateExpense",
-  async (obj, thunkAPI) => {
+export const budgetAdditionToUser = createAsyncThunk(
+  "users/addBudgetToUser",
+  async (userId, thunkAPI) => {
     try {
-      return await updateExpense(obj);
+      return await addBudgetToUser(userId);
     } catch (error) {
       const message =
         (error.response &&
@@ -44,11 +45,11 @@ export const updateOneExpense = createAsyncThunk(
   }
 );
 
-export const updateOneIncome = createAsyncThunk(
-  "users/updateIncome",
+export const chosenBudgetAddition = createAsyncThunk(
+  "users/addChosenBudget",
   async (obj, thunkAPI) => {
     try {
-      return await updateIncome(obj);
+      return await addChosenBudget(obj);
     } catch (error) {
       const message =
         (error.response &&
@@ -79,27 +80,27 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.message = action.payload;
       })
-      .addCase(updateOneExpense.pending, (state, action) => {
+      .addCase(budgetAdditionToUser.pending, (state, action) => {
         state.isLoading = true;
       })
-      .addCase(updateOneExpense.fulfilled, (state, action) => {
+      .addCase(budgetAdditionToUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.user = action.payload;
       })
-      .addCase(updateOneExpense.rejected, (state, action) => {
+      .addCase(budgetAdditionToUser.rejected, (state, action) => {
         state.isLoading = false;
         state.message = action.payload;
       })
-      .addCase(updateOneIncome.pending, (state, action) => {
+      .addCase(chosenBudgetAddition.pending, (state, action) => {
         state.isLoading = true;
       })
-      .addCase(updateOneIncome.fulfilled, (state, action) => {
+      .addCase(chosenBudgetAddition.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.user = action.payload;
+        state.chosenBudget = action.payload;
       })
-      .addCase(updateOneIncome.rejected, (state, action) => {
+      .addCase(chosenBudgetAddition.rejected, (state, action) => {
         state.isLoading = false;
         state.message = action.payload;
       });

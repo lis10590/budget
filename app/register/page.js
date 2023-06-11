@@ -7,10 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { register } from "../_utils/store/auth";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 const Register = () => {
   useEffect(() => {
     if (isSuccess) {
+      toast.success("!נרשמת בהצלחה");
       router.push("/");
     }
   });
@@ -92,7 +94,9 @@ const Register = () => {
           onChange={onChangeInput}
         />
         <div className="d-flex justify-content-center mb-4">
-          <Button onClick={onRegister}>הירשם</Button>
+          <Button className={styles.button} onClick={onRegister}>
+            הירשם
+          </Button>
         </div>
       </Card>
     </div>

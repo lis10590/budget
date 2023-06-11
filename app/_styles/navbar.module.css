@@ -4,3 +4,7 @@
   color: black;
   text-decoration: none;
 }
+
+.navbarDiv {
+  background-image: linear-gradient(to right, #c2dedc, #ece5c7);
+}

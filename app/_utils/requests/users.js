@@ -11,20 +11,38 @@ export const getUser = async (userId) => {
   }
 };
 
-export const updateExpense = async (obj) => {
+export const addBudgetToUser = async (obj) => {
   try {
-    const res = await axios.put(`${apiUrl}/api/users/updateExpense`, obj);
+    const res = await axios.put(`${apiUrl}/api/users/addBudgetToUser`, obj);
     return res.data;
   } catch (err) {
     console.error(err);
   }
 };
 
-export const updateIncome = async (obj) => {
+export const addChosenBudget = async (obj) => {
   try {
-    const res = await axios.put(`${apiUrl}/api/users/updateIncome`, obj);
+    const res = await axios.put(`${apiUrl}/api/users/addChosenBudget`, obj);
     return res.data;
   } catch (err) {
     console.error(err);
   }
 };
+
+// export const updateExpense = async (obj) => {
+//   try {
+//     const res = await axios.put(`${apiUrl}/api/users/updateExpense`, obj);
+//     return res.data;
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
+
+// export const updateIncome = async (obj) => {
+//   try {
+//     const res = await axios.put(`${apiUrl}/api/users/updateIncome`, obj);
+//     return res.data;
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };

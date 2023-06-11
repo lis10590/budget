@@ -5,19 +5,8 @@ const userSchema = new Schema({
   firstName: { type: String },
   lastName: { type: String },
   password: { type: String },
-  expenses: [
-    {
-      expenseName: { type: String },
-      sum: { type: Number },
-      balance: { type: Number },
-    },
-  ],
-  incomes: [
-    {
-      incomeName: { type: String },
-      sum: { type: Number },
-    },
-  ],
+  budgets: [{ type: Schema.Types.ObjectId, ref: "Budget" }],
+  chosenBudget: { type: Schema.Types.ObjectId, ref: "Budget" },
 });
 
 const User = models.User || model("User", userSchema);

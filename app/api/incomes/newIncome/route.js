@@ -1,4 +1,4 @@
-import User from "@/app/_utils/schemas/User";
+import Income from "@/app/_utils/schemas/Income";
 import connectDB from "@/app/_utils/db";
 import { NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
@@ -6,43 +6,17 @@ export const fetchCache = "force-no-store";
 
 export async function POST(req) {
   await connectDB();
-
   const income = await req.json();
-
+  const newIncome = await new Income(income);
   try {
-    const user = await User.findOne({ email: income.email });
-    for (const item of user.incomes) {
-      if (income.incomeName === item.incomeName) {
-        return NextResponse.json("Income exists", {
-          status: 400,
-        });
-      }
-    }
-    try {
-      let result = await User.findOneAndUpdate(
-        { email: income.email },
-        {
-          $push: {
-            incomes: {
-              incomeName: income.incomeName,
-              sum: income.sum,
-            },
-          },
-        }
-      );
-      return NextResponse.json(result, {
-        status: 200,
-      });
-    } catch (err) {
-      return NextResponse.json(
-        { err, message: "Saving income failed" },
-        { status: 400 }
-      );
-    }
-  } catch (error) {
-    console.error(error);
+    const savedIncome = await newIncome.save();
+
+    return NextResponse.json(savedIncome, {
+      status: 200,
+    });
+  } catch (err) {
     return NextResponse.json(
-      { error, message: "getting incomes failed" },
+      { err, message: "Saving income failed" },
       { status: 400 }
     );
   }

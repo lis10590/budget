@@ -10,3 +10,23 @@ export const addNewIncome = async (income) => {
     console.error(err);
   }
 };
+
+export const getIncomes = async () => {
+  try {
+    const res = await axios.get(`${apiUrl}/api/incomes/getIncomes`);
+    return res.data;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const getIncomesByBudget = async (budgetId) => {
+  try {
+    const res = await axios.get(
+      `${apiUrl}/api/incomes/getIncomesByBudget?budgetId=${budgetId}`
+    );
+    return res.data;
+  } catch (err) {
+    console.error(err);
+  }
+};

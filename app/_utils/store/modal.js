@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialModalState = {
   addExpensesModalOpen: false,
   addIncomesModalOpen: false,
+  updateComponentModalOpen: false,
+  chooseBudgetModalOpen: false,
 };
 const modalSlice = createSlice({
   name: "modal",
@@ -19,6 +21,18 @@ const modalSlice = createSlice({
     },
     addIncomesModalClose(state) {
       state.addIncomesModalOpen = false;
+    },
+    updateComponentModalOpen(state) {
+      state.updateComponentModalOpen = true;
+    },
+    updateComponentModalClose(state) {
+      state.updateComponentModalOpen = false;
+    },
+    chooseBudgetModalOpen(state) {
+      state.chooseBudgetModalOpen = true;
+    },
+    chooseBudgetModalClose(state) {
+      state.chooseBudgetModalOpen = false;
     },
   },
 });
