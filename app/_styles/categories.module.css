@@ -1,9 +1,20 @@
 .mainDiv {
-  width: 30rem;
   margin: auto;
 }
 
 .cardHeader {
   background-color: #c2dedc;
   font-weight: bold;
+}
+
+@media (max-width: 480px) {
+  .mainDiv {
+    width: 20rem;
+  }
+}
+
+@media (min-width: 480px) {
+  .mainDiv {
+    width: 30rem;
+  }
 }

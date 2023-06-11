@@ -1,5 +1,5 @@
 "use client";
-import { Card, Button } from "react-bootstrap";
+import { Card, Button, Spinner } from "react-bootstrap";
 import { useSession } from "next-auth/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -27,7 +27,9 @@ const Settings = () => {
     const data = await dispatch(getAllBudgetsByUser(loggedUser.payload._id));
     console.log(data);
     dispatch(getBudgetById(loggedUser.payload.chosenBudget));
-    setChosenBudget(budget.name);
+    if (budget) {
+      setChosenBudget(budget.name);
+    }
   };
 
   useEffect(() => {
@@ -75,7 +77,20 @@ const Settings = () => {
               בחר תקציב
             </Button>
           </div>
-          <p className="text-end mt-3">תקציב נבחר : {chosenBudget}</p>
+          <p className="text-end mt-3">
+            תקציב נבחר :{" "}
+            {chosenBudget ? (
+              chosenBudget
+            ) : (
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+            )}
+          </p>
         </Card.Body>
       </Card>
       <ChooseBudget

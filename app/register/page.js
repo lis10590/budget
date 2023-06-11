@@ -94,7 +94,9 @@ const Register = () => {
           onChange={onChangeInput}
         />
         <div className="d-flex justify-content-center mb-4">
-          <Button onClick={onRegister}>הירשם</Button>
+          <Button className={styles.button} onClick={onRegister}>
+            הירשם
+          </Button>
         </div>
       </Card>
     </div>

@@ -1,5 +1,5 @@
 "use client";
-import { Table, Button } from "react-bootstrap";
+import { Table, Button, Spinner } from "react-bootstrap";
 import styles from "../_styles/home.module.css";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,7 +27,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const { data } = useSession();
   const email = data?.user?.email;
-  // const [selected, setSelected] = useState("");
+
   const user = useSelector((state) => state.users.user);
 
   const getUserAndBudgets = async () => {
@@ -38,57 +38,24 @@ const Home = () => {
     dispatch(getBudgetById(loggedUser.payload.chosenBudget));
   };
 
-  // const populateBudget = () => {
-  //   let id;
-  //   if (budgets) {
-  //     for (const budget of budgets) {
-  //       if (budget.name === selected) {
-  //         id = budget._id;
-  //       }
-  //     }
-
-  //     dispatch(getBudgetByName(id));
-  //   }
-  // };
-
   const addExpenses = useSelector((state) => state.modal.addExpensesModalOpen);
   const addIncomes = useSelector((state) => state.modal.addIncomesModalOpen);
   const budgets = useSelector((state) => state.budgets.budgetsByUser);
   const budget = useSelector((state) => state.budgets.budget);
 
   useEffect(() => {
-    dispatch(getAllBudgets());
-    dispatch(getAllExpenses());
-    dispatch(getAllIncomes());
-    if (email) {
-      getUserAndBudgets();
-      dispatch(getUserByEmail(email));
+    try {
+      // dispatch(getAllBudgets());
+      // dispatch(getAllExpenses());
+      // dispatch(getAllIncomes());
+      if (email) {
+        getUserAndBudgets();
+        dispatch(getUserByEmail(email));
+      }
+    } catch (error) {
+      console.error(error);
     }
   }, [dispatch, email]);
-
-  // useEffect(() => {
-  //   if (selected && user) {
-  //     populateBudget();
-  //   }
-  // }, [selected]);
-
-  // const handleSelection = (selection) => {
-  //   setSelected(selection);
-  // };
-
-  const arrangeBudgets = () => {
-    let budgetNames = [];
-
-    if (budgets) {
-      for (const item of budgets) {
-        budgetNames.push(item.name);
-      }
-
-      return budgetNames;
-    }
-  };
-
-  const budgetNames = arrangeBudgets();
 
   const addExpenseModalHandler = () => {
     dispatch(modalActions.addExpensesModalOpen());
@@ -131,7 +98,7 @@ const Home = () => {
       if (item.category === category) {
         expenseId = item._id;
 
-        if (item.balance === item.sum) {
+        if (Number(item.balance) === Number(item.sum)) {
           newBalance = Number(item.sum) - Number(sum);
           console.log("same sum", newBalance);
         } else {
@@ -153,39 +120,51 @@ const Home = () => {
     <div
       className={`${styles.mainDiv} mt-5 d-flex flex-column align-items-center`}
     >
-      <div className="d-flex flex-column">
-        <p className="text-center">תקציב נבחר</p>
-        {budget && budget !== undefined ? budget.name : null}
-      </div>
-      <div className="d-flex mt-3">
-        <Button
-          className={`mb-5 me-3 ${styles.button}`}
-          onClick={addExpenseModalHandler}
-        >
-          הוספת הוצאה חדשה
-          <FontAwesomeIcon className="ms-2" icon={faPlus} />
-        </Button>
-        <Button
-          className={`mb-5 me-3 ${styles.button}`}
-          onClick={addIncomeModalHandler}
-        >
-          הוספת הכנסה חדשה
-          <FontAwesomeIcon className="ms-2" icon={faPlus} />
-        </Button>
-      </div>
+      {" "}
+      <>
+        <div className="d-flex flex-column">
+          <p className="text-center">תקציב נבחר</p>
+          {budget && budget !== undefined ? (
+            budget.name
+          ) : (
+            <Spinner
+              as="span"
+              animation="border"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+            />
+          )}
+        </div>
+        <div className="d-flex mt-3">
+          <Button
+            className={`mb-5 me-3 ${styles.button}`}
+            onClick={addExpenseModalHandler}
+          >
+            הוספת הוצאה חדשה
+            <FontAwesomeIcon className="ms-2" icon={faPlus} />
+          </Button>
+          <Button
+            className={`mb-5 me-3 ${styles.button}`}
+            onClick={addIncomeModalHandler}
+          >
+            הוספת הכנסה חדשה
+            <FontAwesomeIcon className="ms-2" icon={faPlus} />
+          </Button>
+        </div>
 
-      <Table size="sm">
-        <thead>
-          <tr className="text-right">
-            <th>סכום</th>
-            <th>קטגוריה</th>
-            <th>תאריך</th>
-            <th>שם הוצאה</th>
-          </tr>
-        </thead>
-        <tbody>
-          {budget && budget.expenses
-            ? budget.expenses.map((item) => {
+        <Table size="sm">
+          <thead>
+            <tr className="text-right">
+              <th>סכום</th>
+              <th>קטגוריה</th>
+              <th>תאריך</th>
+              <th>שם הוצאה</th>
+            </tr>
+          </thead>
+          <tbody>
+            {budget && budget.expenses ? (
+              budget.expenses.map((item) => {
                 return (
                   <tr className="text-right" key={item._id}>
                     <td>{item.sum}</td>
@@ -195,21 +174,29 @@ const Home = () => {
                   </tr>
                 );
               })
-            : null}
-        </tbody>
-      </Table>
-      <Table size="sm">
-        <thead>
-          <tr className="text-right">
-            <th>סכום</th>
-            <th>קטגוריה</th>
-            <th>תאריך</th>
-            <th>שם הכנסה</th>
-          </tr>
-        </thead>
-        <tbody>
-          {budget && budget.expenses
-            ? budget.incomes.map((item) => {
+            ) : (
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+            )}
+          </tbody>
+        </Table>
+        <Table size="sm">
+          <thead>
+            <tr className="text-right">
+              <th>סכום</th>
+              <th>קטגוריה</th>
+              <th>תאריך</th>
+              <th>שם הכנסה</th>
+            </tr>
+          </thead>
+          <tbody>
+            {budget && budget.expenses ? (
+              budget.incomes.map((item) => {
                 return (
                   <tr className="text-right" key={item._id}>
                     <td>{item.sum}</td>
@@ -219,21 +206,30 @@ const Home = () => {
                   </tr>
                 );
               })
-            : null}
-        </tbody>
-      </Table>
-      <AddExpense
-        isOpen={addExpenses}
-        onClose={closeExpenseModalHandler}
-        user={user}
-        expenseId={addExpenseToBudget}
-        updateBalance={updateBalance}
-      />
-      <AddIncome
-        isOpen={addIncomes}
-        onClose={closeIncomeModalHandler}
-        incomeId={addIncomeToBudget}
-      />
+            ) : (
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+            )}
+          </tbody>
+        </Table>
+        <AddExpense
+          isOpen={addExpenses}
+          onClose={closeExpenseModalHandler}
+          user={user}
+          expenseId={addExpenseToBudget}
+          updateBalance={updateBalance}
+        />
+        <AddIncome
+          isOpen={addIncomes}
+          onClose={closeIncomeModalHandler}
+          incomeId={addIncomeToBudget}
+        />
+      </>
     </div>
   );
 };

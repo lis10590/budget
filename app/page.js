@@ -1,5 +1,5 @@
 "use client";
-import { Card, Button } from "react-bootstrap";
+import { Card, Button, Spinner } from "react-bootstrap";
 import { faLock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import InputComponent from "./_components/inputComponent";
 import { ToastContainer } from "react-toastify";
@@ -11,7 +11,7 @@ import styles from "./page.module.css";
 
 export default function Login() {
   const router = useRouter();
-
+  const [isLoading, setIsLoading] = useState(false);
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
@@ -27,6 +27,7 @@ export default function Login() {
 
   const onLogin = async () => {
     try {
+      setIsLoading(true);
       const data = await signIn("credentials", {
         redirect: false,
         email: inputs.email,
@@ -34,12 +35,14 @@ export default function Login() {
       });
 
       if (data.error !== null) {
+        setIsLoading(false);
         toast.error("wrong email or password!");
         console.log(data);
       } else {
         router.push("/home");
       }
     } catch (error) {
+      setIsLoading(false);
       toast.error(error);
     }
   };
@@ -70,7 +73,19 @@ export default function Login() {
         />
 
         <div className="d-flex justify-content-center mb-4 mt-4">
-          <Button onClick={onLogin}>התחבר</Button>
+          <Button className={styles.button} onClick={onLogin}>
+            {isLoading ? (
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+            ) : (
+              "התחבר"
+            )}
+          </Button>
         </div>
       </Card>
     </div>

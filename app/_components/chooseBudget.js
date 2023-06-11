@@ -28,10 +28,10 @@ const ChooseBudget = (props) => {
 
       const obj = {
         userId: props.user._id,
-        budgetId: chosenBud.payload[0]._id,
+        budgetId: chosenBud.payload._id,
       };
 
-      props.budget(chosenBud.payload[0].name);
+      props.budget(chosenBud.payload.name);
 
       dispatch(chosenBudgetAddition(obj));
       props.onClose();

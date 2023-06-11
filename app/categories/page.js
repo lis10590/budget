@@ -1,5 +1,5 @@
 "use client";
-import { Card } from "react-bootstrap";
+import { Card, Spinner } from "react-bootstrap";
 import { useSession } from "next-auth/react";
 import { getUserByEmail } from "../_utils/store/users";
 import { getAllBudgetsByUser, getBudgetById } from "../_utils/store/budgets";
@@ -31,21 +31,29 @@ const Categories = () => {
 
   return (
     <div className={styles.mainDiv}>
-      {budget && budget.predefinedExpenses
-        ? budget.predefinedExpenses.map((expense) => {
-            return (
-              <Card className="my-3" key={expense._id}>
-                <Card.Header className={`text-end ${styles.cardHeader}`}>
-                  {expense.category}
-                </Card.Header>
-                <Card.Body>
-                  <p className="text-end">{expense.sum} :תכנון חודשי</p>
-                  <p className="text-end">{expense.balance} :יתרה</p>
-                </Card.Body>
-              </Card>
-            );
-          })
-        : null}
+      {budget && budget.predefinedExpenses ? (
+        budget.predefinedExpenses.map((expense) => {
+          return (
+            <Card className="my-3" key={expense._id}>
+              <Card.Header className={`text-end ${styles.cardHeader}`}>
+                {expense.category}
+              </Card.Header>
+              <Card.Body>
+                <p className="text-end">{expense.sum} :תכנון חודשי</p>
+                <p className="text-end">{expense.balance} :יתרה</p>
+              </Card.Body>
+            </Card>
+          );
+        })
+      ) : (
+        <Spinner
+          as="span"
+          animation="border"
+          size="sm"
+          role="status"
+          aria-hidden="true"
+        />
+      )}
     </div>
   );
 };
