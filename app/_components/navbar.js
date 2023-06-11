@@ -19,38 +19,7 @@ const NavbarComp = () => {
       <Container>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          {data?.user && (
-            <Nav className="me-auto">
-              <Nav.Item>
-                <Link className={`${styles.navbarLink} me-3`} href="/home">
-                  דף הבית
-                </Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Link
-                  className={`${styles.navbarLink} me-3`}
-                  href="/buildBudget"
-                >
-                  הוספת תקציב חדש
-                </Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Link
-                  className={`${styles.navbarLink} me-3`}
-                  href="/categories"
-                >
-                  קטגוריות
-                </Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Link className={`${styles.navbarLink} me-3`} href="/settings">
-                  הגדרות
-                </Link>
-              </Nav.Item>
-            </Nav>
-          )}
-
-          <Nav className="ms-auto">
+          <Nav className="me-auto">
             {!data?.user ? (
               <>
                 <Nav.Item>
@@ -79,6 +48,36 @@ const NavbarComp = () => {
               </Nav.Item>
             )}
           </Nav>
+          {data?.user && (
+            <Nav className="ms-auto">
+              <Nav.Item>
+                <Link className={`${styles.navbarLink} me-3`} href="/settings">
+                  הגדרות
+                </Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Link
+                  className={`${styles.navbarLink} me-3`}
+                  href="/categories"
+                >
+                  קטגוריות
+                </Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Link
+                  className={`${styles.navbarLink} me-3`}
+                  href="/buildBudget"
+                >
+                  הוספת תקציב חדש
+                </Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Link className={`${styles.navbarLink} me-3`} href="/home">
+                  דף הבית
+                </Link>
+              </Nav.Item>
+            </Nav>
+          )}
         </Navbar.Collapse>
       </Container>
     </Navbar>

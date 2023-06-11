@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import { SessionProvider } from "next-auth/react";
 import store from "./_utils/store";
 import NavbarComp from "./_components/navbar";
+import { ToastContainer } from "react-toastify";
 
 export default function RootLayout({ children }) {
   return (
@@ -15,6 +16,7 @@ export default function RootLayout({ children }) {
         <Provider store={store}>
           <SessionProvider>
             <NavbarComp />
+            <ToastContainer />
             {children}
           </SessionProvider>
         </Provider>

@@ -101,7 +101,7 @@ export const addPredefinedIncomeToBudget = async (obj) => {
 export const chooseBudget = async (budget) => {
   try {
     const res = await axios.get(
-      `${apiUrl}/api/budgets/chooseBudget?budgetName=${budget}`
+      `${apiUrl}/api/budgets/chooseBudget?budgetId=${budget}`
     );
     return res.data;
   } catch (err) {

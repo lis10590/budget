@@ -7,10 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { register } from "../_utils/store/auth";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 const Register = () => {
   useEffect(() => {
     if (isSuccess) {
+      toast.success("!נרשמת בהצלחה");
       router.push("/");
     }
   });

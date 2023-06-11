@@ -1,11 +1,12 @@
 "use client";
-import { Modal, CloseButton, Button } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 import DropdownMenu from "./dropdownMenu";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { chooseOneBudget } from "../_utils/store/budgets";
 import { chosenBudgetAddition } from "../_utils/store/users";
 import styles from "../_styles/settings.module.css";
+import { toast } from "react-toastify";
 
 const ChooseBudget = (props) => {
   const dispatch = useDispatch();
@@ -17,7 +18,13 @@ const ChooseBudget = (props) => {
 
   const onSaveBudget = async () => {
     if (selected !== "") {
-      const chosenBud = await dispatch(chooseOneBudget(selected));
+      let id = "";
+      for (const item of props.userBudgets) {
+        if (item.name === selected) {
+          id = item._id;
+        }
+      }
+      const chosenBud = await dispatch(chooseOneBudget(id));
 
       const obj = {
         userId: props.user._id,
@@ -28,6 +35,7 @@ const ChooseBudget = (props) => {
 
       dispatch(chosenBudgetAddition(obj));
       props.onClose();
+      toast.success("!תקציב נבחר בהצלחה");
     }
   };
 

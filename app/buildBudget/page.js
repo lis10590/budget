@@ -25,6 +25,7 @@ import styles from "../_styles/budget.module.css";
 import UpdateComp from "../_components/updateComp";
 import { predefinedExpenseAddition } from "../_utils/store/predefinedExpenses";
 import { predefinedIncomeAddition } from "../_utils/store/predefinedIncomes";
+import { toast } from "react-toastify";
 
 const BuildBudget = () => {
   const dispatch = useDispatch();
@@ -157,6 +158,7 @@ const BuildBudget = () => {
       };
       console.log(obj2);
       await dispatch(budgetAdditionToUser(obj2));
+      toast.success("!תקציב נשמר בהצלחה");
     } catch (error) {
       console.error(error);
     }

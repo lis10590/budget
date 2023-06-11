@@ -12,10 +12,10 @@ export async function GET(req) {
   await connectDB();
 
   const { searchParams } = new URL(req.url);
-  const budgetName = searchParams.get("budgetName");
+  const budgetId = searchParams.get("budgetId");
 
   try {
-    const budget = await Budget.find({ name: budgetName })
+    const budget = await Budget.findById(budgetId)
       .populate({
         path: "expenses",
       })

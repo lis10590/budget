@@ -84,6 +84,7 @@ const Settings = () => {
         budgetNames={budgetNames}
         budget={chooseBudgetHandler}
         user={user}
+        userBudgets={budgets}
       />
     </div>
   );
