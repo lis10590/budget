@@ -1,5 +1,5 @@
 "use client";
-import { FormGroup, Form, Button } from "react-bootstrap";
+import { FormGroup, Form, Button, CloseButton } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import DropdownMenu from "./dropdownMenu";
