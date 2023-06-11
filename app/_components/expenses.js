@@ -3,15 +3,11 @@ import { FormGroup, Form, Button, CloseButton } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import DropdownMenu from "./dropdownMenu";
-import { expenseAddition } from "../_utils/store/expenses";
-import { useSession } from "next-auth/react";
 import { v4 as uuidv4 } from "uuid";
+import styles from "../_styles/budget.module.css";
 
 const Expenses = (props) => {
-  const dispatch = useDispatch();
-  const { data } = useSession();
   const [showComp, setShowComp] = useState(false);
   const [selected, setSelected] = useState("");
   const [customExpense, setCustomExpense] = useState("");
@@ -55,6 +51,7 @@ const Expenses = (props) => {
       const newExpense = {
         category: customExpense,
         sum: customInputSum,
+        balance: sum,
         id: uuidv4(),
       };
       props.newExpense(newExpense);
@@ -62,6 +59,7 @@ const Expenses = (props) => {
       const newExpense = {
         category: selected,
         sum: sum,
+        balance: sum,
         id: uuidv4(),
       };
 
@@ -72,9 +70,9 @@ const Expenses = (props) => {
   return (
     <div>
       <div className="d-flex justify-content-end">
-        <Button className="mb-3" onClick={onAddClick}>
+        <Button className={`mb-3 ${styles.button}`} onClick={onAddClick}>
           הוסף הוצאה
-          <FontAwesomeIcon icon={faPlus} />
+          <FontAwesomeIcon className="ms-2" icon={faPlus} />
         </Button>
       </div>
 
@@ -118,7 +116,10 @@ const Expenses = (props) => {
         </div>
       )}
       <div className="mt-3 d-flex justify-content-start">
-        <Button onClick={handleExpense}> הוסף לרשימה</Button>
+        <Button className={styles.button} onClick={handleExpense}>
+          {" "}
+          הוסף לרשימה
+        </Button>
       </div>
     </div>
   );

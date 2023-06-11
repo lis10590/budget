@@ -4,8 +4,8 @@ import DropdownMenu from "./dropdownMenu";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { expenseAddition } from "../_utils/store/expenses";
-
 import DatePicker from "react-datepicker";
+import styles from "../_styles/addexpense.module.css";
 
 const AddExpense = (props) => {
   const dispatch = useDispatch();
@@ -90,7 +90,7 @@ const AddExpense = (props) => {
 
   return (
     <Modal show={props.isOpen} onHide={props.onClose}>
-      <Modal.Header className="justify-content-center">
+      <Modal.Header className={`justify-content-center ${styles.modalHeader}`}>
         <Modal.Title>הוספת הוצאה</Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -132,7 +132,7 @@ const AddExpense = (props) => {
             </div>
 
             <div className="d-flex justify-content-center">
-              <Button className="mt-3" onClick={onAddCustom}>
+              <Button className={`mt-3 ${styles.button}`} onClick={onAddCustom}>
                 הוספת הוצאה לא מהרשימה{" "}
               </Button>
             </div>
@@ -186,10 +186,15 @@ const AddExpense = (props) => {
         )}
 
         <div className="mt-3 d-flex justify-content-center">
-          <Button className="me-3" onClick={onSaveClick}>
+          <Button
+            className={`mt-3 me-3 ${styles.button}`}
+            onClick={onSaveClick}
+          >
             שמור
           </Button>
-          <Button onClick={props.onClose}>סגור</Button>
+          <Button className={`mt-3  ${styles.button}`} onClick={props.onClose}>
+            סגור
+          </Button>
         </div>
       </Modal.Body>
     </Modal>

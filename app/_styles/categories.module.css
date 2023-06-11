@@ -2,3 +2,8 @@
   width: 30rem;
   margin: auto;
 }
+
+.cardHeader {
+  background-color: #c2dedc;
+  font-weight: bold;
+}

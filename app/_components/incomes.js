@@ -4,15 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import DropdownMenu from "./dropdownMenu";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { incomeAddition } from "../_utils/store/incomes";
-import { useSession } from "next-auth/react";
 import { v4 as uuidv4 } from "uuid";
+import styles from "../_styles/budget.module.css";
 
 const Incomes = (props) => {
-  const dispatch = useDispatch();
-  const { data } = useSession();
-
   const [showComp, setShowComp] = useState(false);
   const [selected, setSelected] = useState("");
   const [customIncome, setCustomIncome] = useState("");
@@ -60,9 +55,9 @@ const Incomes = (props) => {
   return (
     <div>
       <div className="d-flex justify-content-end">
-        <Button className="mb-3" onClick={onAddClick}>
+        <Button className={`mb-3 ${styles.button}`} onClick={onAddClick}>
           הוסף הכנסה
-          <FontAwesomeIcon icon={faPlus} />
+          <FontAwesomeIcon className="ms-2" icon={faPlus} />
         </Button>
       </div>
 
@@ -106,7 +101,10 @@ const Incomes = (props) => {
         </div>
       )}
       <div className="mt-3 d-flex justify-content-start">
-        <Button onClick={handleIncome}> הוסף לרשימה</Button>
+        <Button className={styles.button} onClick={handleIncome}>
+          {" "}
+          הוסף לרשימה
+        </Button>
       </div>
     </div>
   );

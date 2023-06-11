@@ -1,6 +1,7 @@
 "use client";
 import { Modal, FormGroup, Form, Button, CloseButton } from "react-bootstrap";
 import { useState, useEffect } from "react";
+import styles from "../_styles/addexpense.module.css";
 
 const UpdateComp = (props) => {
   useEffect(() => {
@@ -31,7 +32,7 @@ const UpdateComp = (props) => {
   };
   return (
     <Modal show={props.isOpen} onHide={props.onClose}>
-      <Modal.Header className="flex-direction-column">
+      <Modal.Header className={`flex-direction-column ${styles.modalHeader}`}>
         <CloseButton onClick={props.onClose} />
         <Modal.Title>עריכה</Modal.Title>
       </Modal.Header>
@@ -57,7 +58,9 @@ const UpdateComp = (props) => {
           />
         </FormGroup>
         <div className="d-flex justify-content-center mt-3">
-          <Button onClick={onUpdateClick}>עדכן</Button>
+          <Button className={styles.button} onClick={onUpdateClick}>
+            עדכן
+          </Button>
         </div>
       </Modal.Body>
     </Modal>

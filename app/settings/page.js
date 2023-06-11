@@ -64,12 +64,16 @@ const Settings = () => {
   return (
     <div className={`${styles.mainDiv} mt-5`}>
       <Card>
-        <Card.Header className="text-center">הגדרות</Card.Header>
+        <Card.Header className={`text-center ${styles.cardHeader}`}>
+          הגדרות
+        </Card.Header>
         <Card.Body>
           <p className="text-end">{email} :שם משתמש</p>
           <div className="d-flex flex-column align-items-end">
-            <Button className="mt-3 mb-3">שנה סיסמא</Button>
-            <Button onClick={chooseBudgetModalOpen}>בחר תקציב</Button>
+            <Button className={`mt-3 mb-3 ${styles.button}`}>שנה סיסמא</Button>
+            <Button onClick={chooseBudgetModalOpen} className={styles.button}>
+              בחר תקציב
+            </Button>
           </div>
           <p className="text-end mt-3">תקציב נבחר : {chosenBudget}</p>
         </Card.Body>

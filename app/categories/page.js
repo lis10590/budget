@@ -35,7 +35,7 @@ const Categories = () => {
         ? budget.predefinedExpenses.map((expense) => {
             return (
               <Card className="my-3" key={expense._id}>
-                <Card.Header className="text-end">
+                <Card.Header className={`text-end ${styles.cardHeader}`}>
                   {expense.category}
                 </Card.Header>
                 <Card.Body>

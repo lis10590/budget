@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { chooseOneBudget } from "../_utils/store/budgets";
 import { chosenBudgetAddition } from "../_utils/store/users";
+import styles from "../_styles/settings.module.css";
 
 const ChooseBudget = (props) => {
   const dispatch = useDispatch();
@@ -32,17 +33,21 @@ const ChooseBudget = (props) => {
 
   return (
     <Modal show={props.isOpen} onHide={props.onClose}>
-      <Modal.Header className="justify-content-center">בחר תקציב</Modal.Header>
+      <Modal.Header className={`justify-content-center ${styles.modalHeader}`}>
+        בחר תקציב
+      </Modal.Header>
       <Modal.Body>
         <DropdownMenu
           menuOptions={props.budgetNames}
           selected={handleSelection}
         />
         <div className="d-flex justify-content-center mt-3">
-          <Button className="me-3" onClick={onSaveBudget}>
+          <Button className={`me-3 ${styles.button}`} onClick={onSaveBudget}>
             שמור
           </Button>
-          <Button onClick={props.onClose}>סגור</Button>
+          <Button className={styles.button} onClick={props.onClose}>
+            סגור
+          </Button>
         </div>
       </Modal.Body>
     </Modal>

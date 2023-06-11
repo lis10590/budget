@@ -9,8 +9,9 @@ import {
   Row,
   Table,
   Button,
+  Card,
 } from "react-bootstrap";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Expenses from "../_components/expenses";
 import Incomes from "../_components/incomes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -162,62 +163,81 @@ const BuildBudget = () => {
   };
 
   return (
-    <div>
+    <div className="mt-5">
       <Container className="d-flex flex-column">
         <Row>
           <Col>
-            <Table>
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>סכום</th>
-                  <th>קטגוריה</th>
-                </tr>
-              </thead>
-              <tbody>
-                {expenses.map((expense, index) => {
-                  return (
-                    <tr key={index}>
-                      <td>
-                        <FontAwesomeIcon
-                          icon={faPenToSquare}
-                          onClick={() => openModalHandler(expense, "expense")}
-                        />
-                      </td>
-                      <td>{expense.sum}</td>
-                      <td>{expense.category}</td>
+            <Card>
+              <Card.Header className={`text-center ${styles.cardHeader}`}>
+                רשימת הוצאות
+              </Card.Header>
+              <Card.Body>
+                <Table className="mb-5">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>סכום</th>
+                      <th>קטגוריה</th>
                     </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
-            <Table className="mt-5">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>סכום</th>
-                  <th>קטגוריה</th>
-                </tr>
-              </thead>
-              <tbody>
-                {incomes.map((income, index) => {
-                  return (
-                    <tr key={index}>
-                      <td>
-                        <FontAwesomeIcon
-                          icon={faPenToSquare}
-                          onClick={() => openModalHandler(income, "income")}
-                        />
-                      </td>
-                      <td>{income.sum}</td>
-                      <td>{income.category}</td>
+                  </thead>
+                  <tbody>
+                    {expenses.map((expense, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>
+                            <FontAwesomeIcon
+                              icon={faPenToSquare}
+                              onClick={() =>
+                                openModalHandler(expense, "expense")
+                              }
+                            />
+                          </td>
+                          <td>{expense.sum}</td>
+                          <td>{expense.category}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </Table>
+              </Card.Body>
+            </Card>
+            <Card className={`mt-5`}>
+              <Card.Header className={`text-center ${styles.cardHeader}`}>
+                רשימת הכנסות
+              </Card.Header>
+              <Card.Body>
+                <Table className="mt-5">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>סכום</th>
+                      <th>קטגוריה</th>
                     </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
+                  </thead>
+                  <tbody>
+                    {incomes.map((income, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>
+                            <FontAwesomeIcon
+                              icon={faPenToSquare}
+                              onClick={() => openModalHandler(income, "income")}
+                            />
+                          </td>
+                          <td>{income.sum}</td>
+                          <td>{income.category}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </Table>
+              </Card.Body>
+            </Card>
+
             <div className="mt-5">
-              <Button onClick={saveBudget}>שמור תקציב</Button>
+              <Button className={styles.button} onClick={saveBudget}>
+                שמור תקציב
+              </Button>
             </div>
           </Col>
           <Col>
@@ -227,6 +247,7 @@ const BuildBudget = () => {
                 type="text"
                 value={budgetName}
                 onChange={(e) => setBudgetName(e.target.value)}
+                className="text-end"
               />
             </FormGroup>
 

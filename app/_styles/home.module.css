@@ -2,3 +2,15 @@
   width: 30rem;
   margin: auto;
 }
+
+.button {
+  /* background-image: linear-gradient(to right, #c2dedc, #ece5c7); */
+  background-color: #c1d0b5;
+  border: #c1d0b5;
+  color: black;
+  font-weight: bold;
+}
+
+.button:hover {
+  background-color: #99a98f;
+}

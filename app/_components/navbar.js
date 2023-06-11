@@ -15,7 +15,7 @@ const NavbarComp = () => {
     router.push("/");
   };
   return (
-    <Navbar expand="lg">
+    <Navbar expand="lg" className={styles.navbarDiv}>
       <Container>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">

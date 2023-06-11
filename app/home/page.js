@@ -10,7 +10,6 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import AddExpense from "../_components/addExpense";
 import AddIncome from "../_components/addIncome";
 import { modalActions } from "../_utils/store/modal";
-import DropdownMenu from "../_components/dropdownMenu";
 import { getAllBudgetsByUser } from "../_utils/store/budgets";
 import { getAllExpenses } from "../_utils/store/expenses";
 import { getAllIncomes } from "../_utils/store/incomes";
@@ -28,7 +27,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const { data } = useSession();
   const email = data?.user?.email;
-  const [selected, setSelected] = useState("");
+  // const [selected, setSelected] = useState("");
   const user = useSelector((state) => state.users.user);
 
   const getUserAndBudgets = async () => {
@@ -39,18 +38,18 @@ const Home = () => {
     dispatch(getBudgetById(loggedUser.payload.chosenBudget));
   };
 
-  const populateBudget = () => {
-    let id;
-    if (budgets) {
-      for (const budget of budgets) {
-        if (budget.name === selected) {
-          id = budget._id;
-        }
-      }
+  // const populateBudget = () => {
+  //   let id;
+  //   if (budgets) {
+  //     for (const budget of budgets) {
+  //       if (budget.name === selected) {
+  //         id = budget._id;
+  //       }
+  //     }
 
-      dispatch(getBudgetByName(id));
-    }
-  };
+  //     dispatch(getBudgetByName(id));
+  //   }
+  // };
 
   const addExpenses = useSelector((state) => state.modal.addExpensesModalOpen);
   const addIncomes = useSelector((state) => state.modal.addIncomesModalOpen);
@@ -67,15 +66,15 @@ const Home = () => {
     }
   }, [dispatch, email]);
 
-  useEffect(() => {
-    if (selected && user) {
-      populateBudget();
-    }
-  }, [selected]);
+  // useEffect(() => {
+  //   if (selected && user) {
+  //     populateBudget();
+  //   }
+  // }, [selected]);
 
-  const handleSelection = (selection) => {
-    setSelected(selection);
-  };
+  // const handleSelection = (selection) => {
+  //   setSelected(selection);
+  // };
 
   const arrangeBudgets = () => {
     let budgetNames = [];
@@ -134,12 +133,14 @@ const Home = () => {
 
         if (item.balance === item.sum) {
           newBalance = Number(item.sum) - Number(sum);
+          console.log("same sum", newBalance);
         } else {
           newBalance = Number(item.balance) - Number(sum);
+          console.log("not same sum", newBalance);
         }
       }
     }
-    if (newBalance) {
+    if (newBalance !== undefined) {
       const obj = {
         expenseId,
         newBalance,
@@ -157,13 +158,19 @@ const Home = () => {
         {budget && budget !== undefined ? budget.name : null}
       </div>
       <div className="d-flex mt-3">
-        <Button className="mb-5 me-3" onClick={addExpenseModalHandler}>
+        <Button
+          className={`mb-5 me-3 ${styles.button}`}
+          onClick={addExpenseModalHandler}
+        >
           הוספת הוצאה חדשה
-          <FontAwesomeIcon icon={faPlus} />
+          <FontAwesomeIcon className="ms-2" icon={faPlus} />
         </Button>
-        <Button className="mb-5" onClick={addIncomeModalHandler}>
+        <Button
+          className={`mb-5 me-3 ${styles.button}`}
+          onClick={addIncomeModalHandler}
+        >
           הוספת הכנסה חדשה
-          <FontAwesomeIcon icon={faPlus} />
+          <FontAwesomeIcon className="ms-2" icon={faPlus} />
         </Button>
       </div>
 
