@@ -16,6 +16,7 @@ const Settings = () => {
   const [chosenBudget, setChosenBudget] = useState("");
   const budgets = useSelector((state) => state.budgets.budgetsByUser);
   const budget = useSelector((state) => state.budgets.budget);
+  const chosBud = useSelector((state) => state.budgets.chosenBudget);
   const chooseBudgetModal = useSelector(
     (state) => state.modal.chooseBudgetModalOpen
   );
@@ -27,9 +28,8 @@ const Settings = () => {
     const data = await dispatch(getAllBudgetsByUser(loggedUser.payload._id));
     console.log(data);
     dispatch(getBudgetById(loggedUser.payload.chosenBudget));
-    if (budget) {
-      setChosenBudget(budget.name);
-    }
+
+    setChosenBudget(budget.name);
   };
 
   useEffect(() => {
@@ -79,8 +79,8 @@ const Settings = () => {
           </div>
           <p className="text-end mt-3">
             תקציב נבחר :{" "}
-            {chosenBudget ? (
-              chosenBudget
+            {chosBud ? (
+              chosBud.name
             ) : (
               <Spinner
                 as="span"
