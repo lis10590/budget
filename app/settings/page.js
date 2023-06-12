@@ -13,10 +13,11 @@ const Settings = () => {
   const { data } = useSession();
   const dispatch = useDispatch();
   const email = data?.user?.email;
-  const [chosenBudget, setChosenBudget] = useState("");
+
   const budgets = useSelector((state) => state.budgets.budgetsByUser);
   const budget = useSelector((state) => state.budgets.budget);
   const chosBud = useSelector((state) => state.budgets.chosenBudget);
+  const [chosenBudget, setChosenBudget] = useState(budget.name);
   const chooseBudgetModal = useSelector(
     (state) => state.modal.chooseBudgetModalOpen
   );
@@ -28,8 +29,6 @@ const Settings = () => {
     const data = await dispatch(getAllBudgetsByUser(loggedUser.payload._id));
     console.log(data);
     dispatch(getBudgetById(loggedUser.payload.chosenBudget));
-
-    setChosenBudget(budget.name);
   };
 
   useEffect(() => {
@@ -79,8 +78,8 @@ const Settings = () => {
           </div>
           <p className="text-end mt-3">
             תקציב נבחר :{" "}
-            {chosBud ? (
-              chosBud.name
+            {chosenBudget ? (
+              chosenBudget
             ) : (
               <Spinner
                 as="span"
